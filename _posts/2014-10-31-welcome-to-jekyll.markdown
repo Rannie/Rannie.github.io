@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Welcome to Rannie's Page!"
-date:   2014-10-31 14:31:20
+date:   2014-10-31 20:00:00
 categories: Life
 ---
 
