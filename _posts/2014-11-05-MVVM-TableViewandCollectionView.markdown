@@ -80,22 +80,27 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 <br />
 注意到这里是TableView(RAC版本)的ViewModel，通过对数据源的订阅来完成数据的实时刷新:
-		
-```
+
+
+```		
+
 		[source subscribeNext:^(id x) {
             self->_data = x;
             [self->_tableView reloadData];
         }];
+        
 ```
 
 重用Cell的方法实现为：
 
 ```
+
 	- (UITableViewCell *)dequeueCellAndBindInTable:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
 	    id<BindViewDelegate> cell = [tableView dequeueReusableCellWithIdentifier:_templateCell.reuseIdentifier];
 	    [cell bindModel:_data[indexPath.row]];
 	    return (UITableViewCell *)cell;
-}
+	}
+
 ```
 
 这个*BindViewDelegate*是一个单独的协议文件，来规定Cell绑定_data中每个model的行为，具体的实现则有具体的cell展示和model数据来共同完成。
