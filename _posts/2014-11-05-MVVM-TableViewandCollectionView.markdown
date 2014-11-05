@@ -48,30 +48,31 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 * HRTableViewModel.h
 
 ``` 
-#import <UIKit/UIKit.h>
-#import <ReactiveCocoa.h>
 
-@interface HRTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate>
-{
-    UITableView     *_tableView;
-    NSArray         *_data;
-    UITableViewCell *_templateCell;
-    RACCommand      *_disSelection;
-}
-
-+ (instancetype) bindingForTableView:(UITableView *)tableView
-                        sourceSignal:(RACSignal *)source
-                 didSelectionCommand:(RACCommand *)didSelection
-                        templateCell:(UINib *)templateCellNib;
-
-+ (instancetype) bindingForTableView:(UITableView *)tableView
-                        sourceSignal:(RACSignal *)source
-                 didSelectionCommand:(RACCommand *)didSelection
-               templateCellClassName:(NSString *)classCell;
-
-- (UITableViewCell *)dequeueCellAndBindInTable:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
-
-@end
+	#import <UIKit/UIKit.h>
+	#import <ReactiveCocoa.h>
+	
+	@interface HRTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate>
+	{
+	    UITableView     *_tableView;
+	    NSArray         *_data;
+	    UITableViewCell *_templateCell;
+	    RACCommand      *_disSelection;
+	}
+	
+	+ (instancetype) bindingForTableView:(UITableView *)tableView
+	                        sourceSignal:(RACSignal *)source
+	                 didSelectionCommand:(RACCommand *)didSelection
+	                        templateCell:(UINib *)templateCellNib;
+	
+	+ (instancetype) bindingForTableView:(UITableView *)tableView
+	                        sourceSignal:(RACSignal *)source
+	                 didSelectionCommand:(RACCommand *)didSelection
+	               templateCellClassName:(NSString *)classCell;
+	
+	- (UITableViewCell *)dequeueCellAndBindInTable:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+	
+	@end
 	
 ```
 
@@ -90,10 +91,10 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 重用Cell的方法实现为：
 
 ```
-- (UITableViewCell *)dequeueCellAndBindInTable:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
-    id<BindViewDelegate> cell = [tableView dequeueReusableCellWithIdentifier:_templateCell.reuseIdentifier];
-    [cell bindModel:_data[indexPath.row]];
-    return (UITableViewCell *)cell;
+	- (UITableViewCell *)dequeueCellAndBindInTable:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
+	    id<BindViewDelegate> cell = [tableView dequeueReusableCellWithIdentifier:_templateCell.reuseIdentifier];
+	    [cell bindModel:_data[indexPath.row]];
+	    return (UITableViewCell *)cell;
 }
 ```
 
@@ -107,25 +108,26 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 * HRCollectionViewModel.h
 
 ```
-@interface HRCollectionViewModel : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
-{
-    NSArray                 *_data;
-    UICollectionView        *_collectionView;
-    UICollectionViewCell    *_templateCell;
-    RACCommand              *_selectCommand;
-}
 
-+ (instancetype)bindWithCollectionView:(UICollectionView *)collectionView
-                            dataSource:(RACSignal *)source
-                      selectionCommand:(RACCommand *)command
-                          templateCell:(UINib *)nibCell;
-
-+ (instancetype)bindWithCollectionView:(UICollectionView *)collectionView
-                            dataSource:(RACSignal *)source
-                      selectionCommand:(RACCommand *)command
-                 templateCellClassName:(NSString *)classCell;
-
-- (UICollectionViewCell *)dequeueCellAndBindInCollectionView:(UICollectionView *)collectionView indexPath:(NSIndexPath *)indexPath;
+	@interface HRCollectionViewModel : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
+	{
+	    NSArray                 *_data;
+	    UICollectionView        *_collectionView;
+	    UICollectionViewCell    *_templateCell;
+	    RACCommand              *_selectCommand;
+	}
+	
+	+ (instancetype)bindWithCollectionView:(UICollectionView *)collectionView
+	                            dataSource:(RACSignal *)source
+	                      selectionCommand:(RACCommand *)command
+	                          templateCell:(UINib *)nibCell;
+	
+	+ (instancetype)bindWithCollectionView:(UICollectionView *)collectionView
+	                            dataSource:(RACSignal *)source
+	                      selectionCommand:(RACCommand *)command
+	                 templateCellClassName:(NSString *)classCell;
+	
+	- (UICollectionViewCell *)dequeueCellAndBindInCollectionView:(UICollectionView *)collectionView indexPath:(NSIndexPath *)indexPath;
 
 ```
 
