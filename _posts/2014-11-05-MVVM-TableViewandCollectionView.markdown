@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "MVVM实践--TableView，CollectionView的ViewModel（支持RAC）"
+title:  "MVVM实践--TableView，CollectionView的BindingHelper（支持RAC）"
 date:   2014-11-05 21:50:00
 categories: iOS
 ---
@@ -31,13 +31,13 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 为了方便陈述，我先把这两种视图统称为**列表视图**。列表视图在所有的移动端应用都是最常见的展示方式。
 
-上面更简洁的Controllers文章也对传统的使用Tableview的设计进行了改造，众多的数据源和代理方法使得ViewController中有许多重复代码。于是我们想根据MVVM的设计思想决定将样板代码设计到一个类中去，让他将我们指定的datasource和tableview绑定，并自身成为数据源和代理，将传进来的样板Cell进行展示。
+上面更简洁的Controllers文章也对传统的使用Tableview的设计进行了改造，众多的数据源和代理方法使得ViewController中有许多重复代码。于是我想根据逻辑抽象的原则决定将样板代码设计到一个类中去，让他将我们指定的datasource和tableview绑定，并自身成为数据源和代理，将传进来的样板Cell进行展示。
 
 ###RAC版的接口设计及思路
 
-项目链接：[Rannie/HRTableCollectionViewModel][6]
+项目链接：[Rannie/HRTableCollectionBindingHelper][6]
 
-* HRTableViewModel.h
+* HRTableViewBindingHelper.h
 
 
 
@@ -45,7 +45,7 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 		#import <UIKit/UIKit.h>
 		#import <ReactiveCocoa.h>
 		
-		@interface HRTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate>
+		@interface HRTableViewBindingHelper : NSObject <UITableViewDataSource, UITableViewDelegate>
 		{
 		    UITableView     *_tableView;
 		    NSArray         *_data;
@@ -71,10 +71,7 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 两个类实例方法唯一不同的地方是前者传入的Cell为Nib模板，而后者为类，由于tableView都可以对它们进行注册后重用，所以对传入参数进行了区分。
 
-<br />
-注意到这里是TableView(RAC版本)的ViewModel，通过对数据源的订阅来完成数据的实时刷新:
-
-
+注意到这里是TableView(RAC版本)的BindingHelper，通过对数据源的订阅来完成数据的实时刷新:
 
 
 		[source subscribeNext:^(id x) {
@@ -98,16 +95,15 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 这个*BindViewDelegate*是一个单独的协议文件，来规定Cell绑定_data中每个model的行为，具体的实现则有具体的cell展示和model数据来共同完成。
 
-而这个方法单独列出来则是为了方便日后子类化定制时候，能够对这段代码进行复用，毕竟这个ViewModel只是简单的负责了展示，没有更多的逻辑来适应不同的情况和需求。
+而这个方法单独列出来则是为了方便日后子类化定制时候，能够对这段代码进行复用，毕竟这个BindingHelper只是简单的负责了展示，没有更多的逻辑来适应不同的情况和需求。
 
-<br />
-接着来看下CollectionView的ViewModel
+接着来看下CollectionView的BindingHelper
 
-* HRCollectionViewModel.h
-
+* HRCollectionViewBindingHelper.h
 
 
-		@interface HRCollectionViewModel : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
+
+		@interface HRCollectionViewBindingHelper : NSObject <UICollectionViewDataSource, UICollectionViewDelegate>
 		{
 		    NSArray                 *_data;
 		    UICollectionView        *_collectionView;
