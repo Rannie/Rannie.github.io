@@ -5,7 +5,6 @@ date:   2014-11-05 21:50:00
 categories: iOS
 ---
 
-<br />
 最近对项目进行重构，内部讨论了下开始用MVVM+RAC的方式来架设项目，于是把所有代码推倒重来了一次。
 
 ###什么是MVVM
@@ -15,7 +14,6 @@ categories: iOS
 在objc.io的专题中，有一个专题专门讲述了如何写出更简洁的Controller，也有文章向我们介绍了MVVM，虽然描述和代码比较简单，不过也对理解有很大的帮助。
 链接:[更简洁的controller][1], [MVVM介绍][2]
 
-<br />
 ###什么是RAC
 
 **RAC** (ReactiveCocoa) 是**GitHub**官方推出的一个采用函数式编程思想的iOS开发框架，在一些交互性比较强的应用中，函数式编程将大大的提高我们的编程效率和代码的可读性。在苹果推出的Swift语言中，也很大程度上采用了函数式编程思想对语言规则进行设计。
@@ -35,7 +33,6 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 上面更简洁的Controllers文章也对传统的使用Tableview的设计进行了改造，众多的数据源和代理方法使得ViewController中有许多重复代码。于是我们想根据MVVM的设计思想决定将样板代码设计到一个类中去，让他将我们指定的datasource和tableview绑定，并自身成为数据源和代理，将传进来的样板Cell进行展示。
 
-<br />
 ###RAC版的接口设计及思路
 
 项目链接：[Rannie/HRTableCollectionViewModel][6]
