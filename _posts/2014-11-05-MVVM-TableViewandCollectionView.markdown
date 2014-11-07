@@ -127,10 +127,29 @@ RAC的核心在于信号的传递以及处理，结合Objective-C中的block语�
 
 一般来说，CollectionView的使用方式和TableView类似，唯一的不同在于需要指定布局(Layout),设置一些参数来告诉系统如何展示每个Item。所以接口设计以及类的实现上，跟TableView大同小异。
 
-###非RAC
+###非ReactiveCocoa版
 
 
-正在编写中...稍后补充...
+TableViewBindingHelper扩充的接口:
+
+	+ (instancetype)bindingForTableView:(UITableView *)tableView
+                        sourceList:(NSArray *)source
+                 didSelectionBlock:(TableSelectionBlock)block
+                      templateCell:(UINib *)templateCellNib;
+
+	+ (instancetype)bindingForTableView:(UITableView *)tableView
+	                         sourceList:(NSArray *)source
+	                  didSelectionBlock:(TableSelectionBlock)block
+	              templateCellClassName:(NSString *)templateCellClass;
+	
+	- (void)reloadDataWithSourceList:(NSArray *)source;
+
+
+这里使用Array取代了RAC版的Signal，另外使用block来对点击Cell的事件进行回调。区别在于使用Array以后每次需要刷新时需要手动调用 *- reloadData...* 方法。而CollectionView增加的接口与此类似，则不赘述了。
+
+###与MVVM结合对Controller进行改造
+
+
 
 
 [1]: http://objccn.io/issue-1-1/
