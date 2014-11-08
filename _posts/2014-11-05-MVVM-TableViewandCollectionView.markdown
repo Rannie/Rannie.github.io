@@ -170,7 +170,7 @@ TableViewBindingHelper扩充的接口:
 	}
 
 将创建的列表引用给 **ViewModel** 的 *userList* 属性。
-在视图控制器中的 *viewDidLoad* 创建 viewModel 以及 bindingHelper，并用RACSignal来观察 *userList* 的变化。
+在视图控制器中的 *viewDidLoad* 创建 viewModel 以及 bindingHelper，并用 *RACObserver* 来观察 *userList* 的变化。
 
 	- (void)viewDidLoad {
 		  [super viewDidLoad];
