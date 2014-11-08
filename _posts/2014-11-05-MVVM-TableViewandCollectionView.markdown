@@ -9,7 +9,7 @@ categories: iOS
 
 ###什么是MVVM
 
-**MVVM**（Model-View-ViewModel）已经不算是一个很新的名词，最早是微软提出的一种架构，在iOS开发中，我们大部分时间都在与MVC打交道，而MVVM在iOS中将使得设计上将模型与视图解耦，将其交互逻辑放到Viewmodel上而不是传统的控制器中，这样也便于我们写出更简洁的Controller代码。
+**MVVM**（Model-View-ViewModel）已经不算是一个很新的名词，最早是微软提出的一种架构，在iOS开发中，我们大部分时间都在与MVC打交道，而MVVM在iOS中将使得设计上将模型与视图解耦，将其数据逻辑放到*viewModel*上而不是传统的控制器中，这样也便于我们写出更简洁的Controller代码。
 
 在objc.io的专题中，有一个专题专门讲述了如何写出更简洁的Controller，也有文章向我们介绍了MVVM，虽然描述和代码比较简单，不过也对理解有很大的帮助。
 链接:[更简洁的controller][1], [MVVM介绍][2]
