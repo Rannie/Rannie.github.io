@@ -149,7 +149,48 @@ TableViewBindingHelper扩充的接口:
 
 ###与MVVM结合对Controller进行改造
 
+下面通过一个简单的例子来将BindingHelper和ViewModel融入到Controller中。
 
+我们有一个 **User** 的模型，并使用 **UITableView** 对其数据列表进行展示。
+
+首先，创建一个**ViewModel**来获取数据。
+
+	- (void)fetchUsers {
+	    NSInteger count = arc4random()%20 + 1;
+	    
+	    NSMutableArray *list = [NSMutableArray array];
+	    for (int i = 0; i < count; i++) {
+	        User *user = [User new];
+	        user.name = [NSString stringWithFormat:@"user--%d", i];
+	        user.age = arc4random()%100;
+	        [list addObject:user];
+	    }
+	    
+	    self.userList = list;
+	}
+
+将创建的列表引用给 **ViewModel** 的 *userList* 属性。
+在视图控制器中的 *viewDidLoad* 创建 viewModel 以及 bindingHelper，并用RACSignal来观察 *userList* 的变化。
+
+	- (void)viewDidLoad {
+		  [super viewDidLoad];
+		  self.viewModel = [[UserViewModel alloc] init];
+		  
+		  UINib *cellNib = [UINib nibWithNibName:@"UserCell" bundle:nil];
+		  RACCommand *command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+		      NSLog(@"select : %@", input);
+		      return [RACSignal empty];
+		  }];
+		  self.bindingHelper = [HRTableViewBindingHelper bindingForTableView:self.tableView sourceSignal:RACObserve(self.viewModel, userList) didSelectionCommand:command templateCell:cellNib];
+	}
+
+获取数据只要调用 *fetchUsers* 方法列表即可刷新了。
+
+一个简单的结合Demo就完成了。在很多场景，我们可能有更多的逻辑针对TableView的展示等，我们可以通过子类BindingHelper的方式来实现。
+
+再贴完整项目地址:[HRTableCollectionBindingHelperDemo][6]
+
+欢迎提出建议，个人联系方式详见[关于][7]。
 
 
 [1]: http://objccn.io/issue-1-1/
@@ -157,4 +198,5 @@ TableViewBindingHelper扩充的接口:
 [3]: http://limboy.me/ios/2013/06/19/frp-reactivecocoa.html
 [4]: http://limboy.me/ios/2013/12/27/reactivecocoa-2.html
 [5]: http://limboy.me/tech/2014/06/06/deep-into-reactivecocoa2.html
-[6]: https://github.com/Rannie/HRTableCollectionViewModel
+[6]: https://github.com/Rannie/HRTableCollectionBindingHelper
+[7]: http://rannie.github.io/about/
