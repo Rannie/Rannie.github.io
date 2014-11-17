@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "为应用做iOS8,6以及6plus的适配"
+title:  "为应用做iOS8,iPhone6以及6plus的适配"
 date:   2014-11-17 16:40:00
 categories: iOS
 
