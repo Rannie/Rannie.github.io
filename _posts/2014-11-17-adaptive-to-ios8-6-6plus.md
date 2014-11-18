@@ -87,6 +87,13 @@ Compact意味着紧凑布局，Regular则宽松，Any任意。
 
 Autolayout的使用并不困难，核心在于你添加的约束要能确定你视图在不同设备不同情况下的位置。比如我有一个按钮，宽高不变并且在任何宽度的屏幕上，始终贴着Cell的上侧以及右侧。将我的文字需求抽象成约束(Constraint)则表现为
 
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111805.png)
+
+Spacing to neighbor 的约束我加了右侧8上侧7，并且宽高固定，也可以对不同的视图加等宽等高。左对齐等等等待，但是无论怎么加约束，核心都在于
+
+> 你添加的约束要能确定你视图在不同设备不同情况下的位置
+
+如果你添加的约束让IB不知道如何布局，或者不小心更改了视图的未知与原来的约束不符，IB都会报警告或者错误来提示你。
 
 
 ###代码使用Autolayout?Masonry?
