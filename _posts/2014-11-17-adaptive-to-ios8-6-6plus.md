@@ -74,11 +74,22 @@ Compact意味着紧凑布局，Regular则宽松，Any任意。
 ![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111802.png)
 
 其他的情况可以打开XCode一一去试。
-当把SizeClass设置为Compact Width|Regular Height之后，对应Controller在InterfaceBuilder中的表示也更改了
+当把SizeClass设置为Compact Width|Regular Height之后，对应Controller在InterfaceBuilder中的表示也会随之改变。
+改变前
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111803.png)
+
+改变后
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111804.png)
+
+由于SizeClass在适配不同系统的表现未知，项目中暂时没有使用，而是采用了Xib+Autolayout的方式进行适配。
+
+Autolayout的使用并不困难，核心在于你添加的约束要能确定你视图在不同设备不同情况下的位置。比如我有一个按钮，宽高不变并且在任何宽度的屏幕上，始终贴着Cell的上侧以及右侧。将我的文字需求抽象成约束(Constraint)则表现为
 
 
 
-###Autolayout?Masonry?
+###代码使用Autolayout?Masonry?
 
 
 
