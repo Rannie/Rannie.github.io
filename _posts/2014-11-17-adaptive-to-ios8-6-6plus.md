@@ -67,6 +67,15 @@ Compact意味着紧凑布局，Regular则宽松，Any任意。
 
 举个例子，比如所有的手机竖屏，在SizeClass的表现为
 
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111801.png)
+
+那么横屏则为
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111802.png)
+
+其他的情况可以打开XCode一一去试。
+当把SizeClass设置为Compact Width|Regular Height之后，对应Controller在InterfaceBuilder中的表示也更改了
+
 
 
 ###Autolayout?Masonry?
