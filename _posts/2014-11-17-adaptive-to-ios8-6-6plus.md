@@ -59,11 +59,18 @@ iPhone6，6plus的出现让我们在开发中不再局限于*320x480*了，我�
 	
 来全局访问设备信息了，而且之后也不会因为横竖屏而改变。
 
+###SizeClass, Xib+Autolayout的使用
+
+如果我们使用InterfaceBuilder做屏幕适配那将会方便很多。
+XCode6中引入了*Size Class*，淡化了尺寸，而新增了Compact,Regular和Any的概念。
+Compact意味着紧凑布局，Regular则宽松，Any任意。
+
+举个例子，比如所有的手机竖屏，在SizeClass的表现为
+
+
+
 ###Autolayout?Masonry?
 
-
-
-###sizeclass, xib+autolayout
 
 
 
