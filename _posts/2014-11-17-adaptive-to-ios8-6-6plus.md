@@ -153,6 +153,8 @@ Autolayout自动处理了所有这些constraints,并且做了一些数学运算�
 
 这里的*"[leftButton]-[centerButton]-[rightButton]"*描述了三个button的关系，而这三个button是通过*NSDictionaryOfVariableBindings*存入字典的，这是一种通过变量名快速生成字典的方式。
 
+另外需要注意的是我们需要手动调用*setNeedsUpdateConstraints*来触发constraints.
+
 无论是使用直接的代码还是*VFL*代码，Autolayout的代码还是显得有些过多和令人作呕。所以推荐还是使用Xib中添加约束的方式来完成布局。如果真的要用代码的话，这里推荐一个优秀的第三方库:
 
 [Masonry][3]
@@ -205,12 +207,78 @@ Autolayout自动处理了所有这些constraints,并且做了一些数学运算�
     	make.edges.equalTo(superview).with.insets(padding);
 	}];
 	
+Masonry和NSConstraint的api属性对比
 
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111904.png)
+
+
+在Masonry中能够添加autolayout约束有三个函数
+
+
+	- (NSArray *)mas_makeConstraints:(void(^)(MASConstraintMaker *make))block;
+	- (NSArray *)mas_updateConstraints:(void(^)(MASConstraintMaker *make))block;
+	- (NSArray *)mas_remakeConstraints:(void(^)(MASConstraintMaker *make))block;
+	/*
+		mas_makeConstraints 只负责新增约束 Autolayout不能同时存在两条针对于同一对象的约束 否则会报错 
+		mas_updateConstraints 针对上面的情况 会更新在block中出现的约束 不会导致出现两个相同约束的情况
+		mas_remakeConstraints 则会清除之前的所有约束 仅保留最新的约束
+		
+		三种函数善加利用 就可以应对各种情况了
+	*/
+	
+
+#####实践：让两个高度为150的view垂直居中且等宽且等间隔排列 间隔为10(自动计算其宽度)
+
+	int padding1 = 10;
+	[sv2 mas_makeConstraints:^(MASConstraintMaker *make) {
+		   make.centerY.mas_equalTo(sv.mas_centerY);
+		   make.left.equalTo(sv.mas_left).with.offset(padding1);
+		   make.right.equalTo(sv3.mas_left).with.offset(-padding1);
+		   make.height.mas_equalTo(@150);
+		   make.width.equalTo(sv3);
+	}];
+	[sv3 mas_makeConstraints:^(MASConstraintMaker *make) {
+		   make.centerY.mas_equalTo(sv.mas_centerY);
+		   make.left.equalTo(sv2.mas_right).with.offset(padding1);
+		   make.right.equalTo(sv.mas_right).with.offset(-padding1);
+		   make.height.mas_equalTo(@150);
+		   make.width.equalTo(sv2);
+	}];
+
+其实Masonry就是对原生的Autolayout进行了封装，以便于更简洁的使用Autolayout语法。关于其具体使用我们可以下载官方Demo，也可以参考下这篇博客:[Masonry介绍与使用实践(快速上手Autolayout)][4]
 
 ###远程推送
 
+iOS8中的远程通知API进行了修改，之前的注册方法在iOS8下无法工作。
 
+那么在 iOS 8 下用哪个 API 去注册远程推送功能？用新的 API：*registerForRemoteNotifications*。
+
+于是我们需要针对不同的系统做不同的代码：
+
+	UIApplication *application = [UIApplication sharedApplication];
+	
+	if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+	   	UIUserNotificationSettings *settings = [UIUserNotificationSettings 		settingsForTypes:(UIRemoteNotificationTypeBadge                                            		|UIRemoteNotificationTypeSound                                            		|UIRemoteNotificationTypeAlert)
+	                                                                             categories:nil];
+	    [application registerUserNotificationSettings:settings];
+	    [application registerForRemoteNotifications];
+	} else {
+	    [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge
+	                                                     |UIRemoteNotificationTypeSound
+	                                                     |UIRemoteNotificationTypeAlert)];
+	}
+
+if中为iOS8下的配置，else则为之前。
+
+简单的说，Apple 在 iOS 8 将 RemoteNotification 和 LocalNotification 统一了起来。两种 Notifications 将统一由 UIUserNotificationSettings 来管理用户界面相关的东西：标记、声音和提醒。除了统一用户界面的通知外，UIUserNotificationSettings 还引入了 UIUserNotificationCategory，可以让用户方便的直接在 Notification 上进行一些快捷的操作（Action）。
+
+
+<br />
+以上为本篇博客全部内容,欢迎提出建议,个人联系方式详见[关于][5]。
 
 [1]:http://www.paintcodeapp.com/news/iphone-6-screens-demystified
 [2]:https://github.com/Rannie/make-app-adaptive-to-ios8-ip6-6plus
 [3]:https://github.com/Masonry/Masonry
+[4]:http://adad184.com/2014/09/28/use-masonry-to-quick-solve-autolayout/
+[5]:http://rannie.github.io/about/
