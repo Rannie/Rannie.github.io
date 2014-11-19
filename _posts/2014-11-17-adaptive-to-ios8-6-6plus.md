@@ -129,7 +129,82 @@ Autolayout自动处理了所有这些constraints,并且做了一些数学运算�
 	  
 	[self.view addConstraint:constraint];
 	
-这段代码给button1这个按钮创建了一个水平居中父视图的约束。可以看出来需要配置的参数非常多。苹果还支持一种可视化表述方式*VFL*来写约束,不过也非常抽象。需要程序员在编写代码时脑子里一直想象真实的表现。在iOS6刚问世的时候苹果首次加入了Autolayout,支持IB以及代码方式。
+这段代码给button1这个按钮创建了一个水平居中父视图的约束。
+
+苹果官方支持的Autolayout的一些属性(attribute)有:
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111903.png)
+
+
+我再给button1加一个固定宽度200的约束
+
+	constraint = [NSLayoutConstraint 
+				constraintWithItem:button1 			
+				attribute:NSLayoutAttributeWidth 
+				relatedBy:NSLayoutRelationEqual 
+				toItem:nil 
+				attribute:NSLayoutAttributeNotAnAttribute 
+				multiplier:1.0f				constant:200.0f];	[button1 addConstraint:constraint];
+	
+可以看到水平居中加固定宽度就要写很多代码，还没有交代高度，垂直方向位置等。constraint也可以设置优先级,在约束有冲突的时候系统优先按优先级高的约束去设置位置。
+可以看出来需要配置的参数非常多。苹果还支持一种可视化表述方式*VFL*来写约束,不过也非常抽象。需要程序员在编写代码时脑子里一直想象真实的表现。在iOS6刚问世的时候苹果首次加入了Autolayout,支持IB以及代码方式。类似于下面
+	NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(		leftButton, centerButton, rightButton);	NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"[leftButton]-[centerButton]-[rightButton]"							options:NSLayoutFormatAlignAllBaseline 
+							metrics:nil							views:viewsDictionary];	[self.view addConstraints:constraints];
+
+这里的*"[leftButton]-[centerButton]-[rightButton]"*描述了三个button的关系，而这三个button是通过*NSDictionaryOfVariableBindings*存入字典的，这是一种通过变量名快速生成字典的方式。
+
+无论是使用直接的代码还是*VFL*代码，Autolayout的代码还是显得有些过多和令人作呕。所以推荐还是使用Xib中添加约束的方式来完成布局。如果真的要用代码的话，这里推荐一个优秀的第三方库:
+
+[Masonry][3]
+
+用法在官方的Readme和demo中有详细的介绍。
+
+引用其中对原生的NSConstraint的比较。实现一个设置四周padding的约束，使用原生代码则为
+
+	[superview addConstraints:@[
+
+	    //view1 constraints
+	    [NSLayoutConstraint constraintWithItem:view1
+	                                 attribute:NSLayoutAttributeTop
+	                                 relatedBy:NSLayoutRelationEqual
+	                                    toItem:superview
+	                                 attribute:NSLayoutAttributeTop
+	                                multiplier:1.0
+	                                  constant:padding.top],
+	
+	    [NSLayoutConstraint constraintWithItem:view1
+	                                 attribute:NSLayoutAttributeLeft
+	                                 relatedBy:NSLayoutRelationEqual
+	                                    toItem:superview
+	                                 attribute:NSLayoutAttributeLeft
+	                                multiplier:1.0
+	                                  constant:padding.left],
+	
+	    [NSLayoutConstraint constraintWithItem:view1
+	                                 attribute:NSLayoutAttributeBottom
+	                                 relatedBy:NSLayoutRelationEqual
+	                                    toItem:superview
+	                                 attribute:NSLayoutAttributeBottom
+	                                multiplier:1.0
+	                                  constant:-padding.bottom],
+	
+	    [NSLayoutConstraint constraintWithItem:view1
+	                                 attribute:NSLayoutAttributeRight
+	                                 relatedBy:NSLayoutRelationEqual
+	                                    toItem:superview
+	                                 attribute:NSLayoutAttributeRight
+	                                multiplier:1
+	                                  constant:-padding.right],
+	
+	 ]];
+	 
+而使用Masonry则是block中简单的一句话。
+
+	UIEdgeInsets padding = UIEdgeInsetsMake(10, 10, 10, 10);
+	[view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+    	make.edges.equalTo(superview).with.insets(padding);
+	}];
+	
 
 
 ###远程推送
@@ -138,3 +213,4 @@ Autolayout自动处理了所有这些constraints,并且做了一些数学运算�
 
 [1]:http://www.paintcodeapp.com/news/iphone-6-screens-demystified
 [2]:https://github.com/Rannie/make-app-adaptive-to-ios8-ip6-6plus
+[3]:https://github.com/Masonry/Masonry
