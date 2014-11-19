@@ -95,12 +95,34 @@ Spacing to neighbor 的约束我加了右侧8上侧7，并且宽高固定，也�
 
 如果你添加的约束让IB不知道如何布局，或者不小心更改了视图的未知与原来的约束不符，IB都会报警告或者错误来提示你。
 
+我在更改了Button位置后，IB会给提示个警告
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111901.png)
 
 
+提示按照当前约束的来算，x应该在346点，而现在在321点。点击警告会有修改提示
+
+
+![sizeimage](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014111902.png)
+
+如果选择**Update Frame**来fix，系统会自动挪动button的位置，而如果是**Update Constraints**则系统会按当前位置去更新原有的约束来适应当前情形。
 
 ###代码使用Autolayout?Masonry?
 
 
+相对于使用IB中的Autolayout，手写代码来创建约束恐怕要恶心很多.
+
+	NSLayoutConstraint *constraint = [ NSLayoutConstraint  constraintWithItem:button1  
+						                               attribute:NSLayoutAttributeCenterX  
+						                               relatedBy:NSLayoutRelationEqual  
+						                               toItem:self.view  
+						                               attribute:NSLayoutAttributeCenterX  
+						                               multiplier:1.0f  
+						                               constant:00.0f  ];  
+	  
+	[self.view addConstraint:constraint];
+	
+这段代码给button1这个按钮创建了一个水平居中父视图的约束。可以看出来需要配置的参数非常多。苹果还支持一种可视化表述方式*VFL*来写约束,不过也非常抽象。需要程序员在编写代码时脑子里一直想象真实的表现。在iOS6刚问世的时候苹果首次加入了Autolayout,支持IB以及代码方式。
 
 
 ###远程推送
