@@ -107,6 +107,13 @@ Spacing to neighbor 的约束我加了右侧8上侧7，并且宽高固定，也�
 
 如果选择**Update Frame**来fix，系统会自动挪动button的位置，而如果是**Update Constraints**则系统会按当前位置去更新原有的约束来适应当前情形。
 
+正如你在上面看到的，Autolayout的基本工具是constraints。一个constraint描述了两个视图间的几何关系，例如，你可能有一个constraint是这样描述的：
+
+> labelA的右边界与buttonB的左边界之间有20像素的空白空间
+
+Autolayout自动处理了所有这些constraints,并且做了一些数学运算以得出所有视图的理想位置和尺寸。你不再需要去手动设置视图的frame-Autolayout为你做了处理，它完全基于你对那些视图设置的constraints。
+
+
 ###代码使用Autolayout?Masonry?
 
 
