@@ -259,7 +259,7 @@ iOS8中的远程通知API进行了修改，之前的注册方法在iOS8下无法
 	UIApplication *application = [UIApplication sharedApplication];
 	
 	if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
-	   	UIUserNotificationSettings *settings = [UIUserNotificationSettings 		settingsForTypes:(UIRemoteNotificationTypeBadge                                            		|UIRemoteNotificationTypeSound                                            		|UIRemoteNotificationTypeAlert)
+	   	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge                                        |UIRemoteNotificationTypeSound                                                |UIRemoteNotificationTypeAlert)
 	                                                                             categories:nil];
 	    [application registerUserNotificationSettings:settings];
 	    [application registerForRemoteNotifications];
