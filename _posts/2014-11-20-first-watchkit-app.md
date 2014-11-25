@@ -76,6 +76,8 @@ Xcode提供几种固定的布局来安排glance中的内容，在选定适合你
 正如iOS开发中，第一个需要了解的是Controller的生命周期一样，在WatchKit中Controller的生命周期也是我们编写应用的生命线。
 模板里默认给出了一些方法，类似于*viewDidLoad*,*viewWillAppear*和*viewDidDisappear*.
 
+我们一般在 *-initWithContext:* 和 *-willActivate* 中配置“视图元素”的属性，在 *-didDeactivate* 中停用像是 NSTimer 之类的会 hold 住 self 的对象。需要特别注意的是，在 *-didDeactivate* 中对“视图元素”属性进行设置是无效的，因为当前的 WKInterfaceController 已经非活跃。
+
 ![watch image](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112015.png)
 
 
