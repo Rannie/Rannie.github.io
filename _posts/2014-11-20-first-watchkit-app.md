@@ -83,6 +83,25 @@ Xcode提供几种固定的布局来安排glance中的内容，在选定适合你
 
 ###第一个AppleWatch应用
 
+现在我们使用XCode6.2beta来创建第一个**Apple Watch**应用。
+首先我们在storyboard上创建一个WKInterfaceLabel，并对其位置进行调整，让其居中显示。
+
+![watch image](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112601.png)
+
+拖入到Main Interface Controller之后，对其在运行时的文本进行设置。
+
+![watch image](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112604.png)
+
+运行模拟器，并更改硬件设置，显示Apple Watch。
+
+![watch image](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112602.png)
+
+最后，第一个AppleWatch Demo就这么完成了！
+
+![watch image](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112603.png)
 
 
+<br />
+以上为本篇博客全部内容,欢迎提出建议,个人联系方式详见[关于][1]。
 
+[1]:http://rannie.github.io/about/
