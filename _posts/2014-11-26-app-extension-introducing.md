@@ -96,3 +96,14 @@ categories: iOS
 
 用图示来描述这些通信交互方式：
 
+![ext iamge](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112705.png)
+
+
+###共享功能
+
+
+###扩展的 Info.plist
+
+
+###设计 App Extensions
+
