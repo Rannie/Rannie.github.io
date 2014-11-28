@@ -82,7 +82,7 @@ categories: iOS
 
 ![ext iamge](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112704.png)
 
-####Extension 如何工作
+###Extension 如何工作
 
 扩展都有自己单独的二进制文件，并催生了其作为独立的进程。扩展的生命周期同一个应用程序的有点不同。当用户在其他应用程序调用你的扩展，扩展生命周期就开始于这一点。在你调用扩展的应用程序被称为 *host app*。应用扩展完成了它的任务后，它的生命周期即将结束。当然也可能它的一些网络请求仍在后台运行。
 
@@ -99,7 +99,13 @@ categories: iOS
 ![ext iamge](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112705.png)
 
 
-###共享功能
+####共享功能
+
+由于每个扩展是单独的 Target 而且与 Container App 分开，那么如何复用代码呢？例如，如果你写一个应用程序，可以让用户将图片张贴到社交网络服务，那么重新在共享扩展中使用这些机制是理想的效果。
+
+iOS8下可以创建横跨应用程序以及扩展间共用的嵌入式框架(embedded frameworks),例如，如果你设计应用程序分离出的各种功能,如网络请求的社交网络服务，您可以轻松地将逻辑重用在应用程序的扩展中。
+
+不过需要注意的是，并不是所有的 Cocoa Touch 框架都能应用在扩展中。你可以让编译器告诉你，当你通过执行以下操作使用被禁的API：选择在Project Navigator项目，然后从目标列表中选择你的框架。单击常规选项卡，并选中只允许应用程序扩展API。
 
 
 ###扩展的 Info.plist
