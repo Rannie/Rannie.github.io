@@ -107,9 +107,39 @@ iOS8下可以创建横跨应用程序以及扩展间共用的嵌入式框架(emb
 
 不过需要注意的是，并不是所有的 Cocoa Touch 框架都能应用在扩展中。你可以让编译器告诉你，当你通过执行以下操作使用被禁的API：选择在Project Navigator项目，然后从目标列表中选择你的框架。单击常规选项卡，并选中只允许应用程序扩展API。
 
+![ext iamge](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014112801.png)
+
+启用这个会导致编译器会在使用违禁API的时候提示警告。你应该确认保证所有的框架都能让应用扩展使用,现在并不多的框架不能在应用扩展使用。列举如下：
+
+* EventKitUI 
+* UIActionSheet 和 UIAlertSheet. 被 UIAlertController 所取代
+* UIApplication 包括 *sharedApplication*,*beginIgnoringInteractionEvents*,*endIgnoringInteractionEvents*,*openURL*
+
 
 ###扩展的 Info.plist
 
+跟应用一样，扩展也有info.plist文件但内容完全不同。所有的扩展都包含一个 **NSExtension** 的字典，不同扩展的内容不同，但它们都必须包括 **NSExtensionPointIdentifier** 键，它标识扩展的类型。
+
+该 **NSExtension** 字典也有助于操作系统和其他应用程序决定什么时候让你的扩展提供给用户。**NSExtensionActivationRule** 字典定义必要的规则;另外，在用户将要调用你的扩展的时候也会分好多种情况。例如你的 Photo Editing Extension 可能会接收图片对象，也可能有视频对象，还是两个都接收，你可以通过对字典的设置来表明。
+
+你需要申明哪些 Stroyboard 或者 Class 文件被扩展所使用。而这些可以通过键 **NSExtensionMainStoryboard** 和 **NSExtensionPrincipalClass** 来设置。
+
+如果想更深入的了解字典信息，可以查看苹果的 [App Extension Keys][1]
+
 
 ###设计 App Extensions
+
+一个应用扩展应该被设计为用来执行一个特定的任务。如果你有很多不同的功能想提供给用户，它可能会是有意义的提供多个扩展，而不是杂乱的用户界面。你还需要选择你要执行的任务的相应扩展类型。例如，你不会使用 *Action Extension* 将内容发布到社交网站,而是使用 *Share Extension*.同样的，一个 *Photo Editing Extension* 不能承担分享图片的任务。归根到底，系统会在适当的时候调用适当的扩展类型，你要做的就是为合适的功能指定合适的类型。
+
+请记住，当你调用扩展，用户不会离开主机的应用程序(上文中的 *host app*),相反,host app 会将你的扩展界面呈现给用户。这是一个机会来区分你的扩展和 host app 同时炫耀提供的功能。从UI的角度看，一个用户无论是点扩展的图标还是扩展的容器应用的图标，都是在选择你的应用。这也会告诉用户是哪些应用给我提供了这些功能。
+
+扩展默认情况下不可见;用户必须明确启用扩展。此外，用户可以禁用它，或重组第三方扩展提供类似功能的列表。一定要提供有用的特性，为了保持你的应用程序在其列表的顶部！用户可能不会明确的知道你的应用提供了扩展，你可以使用一些方法来提示用户去启用你的扩展，比如邮件，或者 App Store 上的描述等等。
+
+
+<br />
+以上为本篇博客全部内容,欢迎提出建议,个人联系方式详见[关于][2]。
+
+
+[1]:https://developer.apple.com/library/prerelease/ios/documentation/General/Reference/InfoPlistKeyReference/Articles/SystemExtensionKeys.html
+[2]:http://rannie.github.io/about
 
