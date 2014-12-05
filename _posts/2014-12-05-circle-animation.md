@@ -96,11 +96,11 @@ categories: iOS
 ![xcodeimg](http://cdn1.raywenderlich.com/wp-content/uploads/2014/11/Screen-Shot-2014-11-04-at-11.13.41-PM.png)
 
 接下来我们要添加 pop 的代码以及 button 的引用在 ViewController.swift 中。
-		
-		@IBOutlet weak var button: UIButton!
-	    @IBAction func circleTapped(sender: UIButton) {
-	        self.navigationController?.popViewControllerAnimated(true)
-	    }
+
+	@IBOutlet weak var button: UIButton!
+    @IBAction func circleTapped(sender: UIButton) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
 
 然后链接到 IB 中。
 
@@ -113,6 +113,50 @@ categories: iOS
 
 
 ###Custom Animation
+
+编写一个自定义的 Push 或者 Pop 动画，你需要实现 **UINavigationControllerDelegate** 协议的 **animationControllerForOperation** 方法。 创建一个新的 *iOS\Source\Cocoa Touch Class* 模板文件。
+
+	class NavigationControllerDelegate: NSObject, UINavigationControllerDelegate {
+ 
+	}
+	
+然后打开 Main.storyboard 来设置一个 UINavigationController 的代理的实例。首先需要在 Navigation Controller Scene 中添加一个 Object 。
+
+![xcodeimg](http://cdn3.raywenderlich.com/wp-content/uploads/2014/10/Screenshot-2014-10-23-15.39.30-700x403.png)
+
+将其 Custom Class 设置为刚才添加的 NavigationControllerDelegate 
+
+![xcodeimg](http://cdn1.raywenderlich.com/wp-content/uploads/2014/10/Screenshot-2014-10-23-15.40.25.png)
+
+然后将 NavigationController 的 Delegate 指向这个 Object
+
+![xcodeimg](http://cdn5.raywenderlich.com/wp-content/uploads/2014/10/Screenshot-2014-10-23-15.41.18-406x500.png)
+
+回到 NavigationControllerDelegate 添加占位方法
+
+    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return nil;
+    }
+   
+这个方法会得到导航视图控制器切换的两个视图控制器，然后它的工作就是负责实现一个 **UIViewControllerAnimatedTransitioning** 。
+
+之后我们创建一个新的类来实现动画。 CircleTransitionAnimator :
+
+![xcodeimg](http://cdn4.raywenderlich.com/wp-content/uploads/2014/10/Screenshot-2014-10-23-15.52.17-700x410.png)
+
+然后我们需要让这个类遵守协议，并添加 required 方法。
+
+	weak var transitionContext: UIViewControllerContextTransitioning?
+    
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+        return 0.5
+    }
+    
+    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+        
+    }
+    
+
 
 
 ###An Interactive Gesture Animation
