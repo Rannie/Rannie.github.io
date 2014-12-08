@@ -156,17 +156,161 @@ categories: iOS
         
     }
     
+接下来开始编写其中的动画代码
 
+    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+        //1
+        self.transitionContext = transitionContext
+        
+        //2
+        var containerView = transitionContext.containerView()
+        var fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) as ViewController
+        var toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey) as ViewController
+        var button = fromViewController.button
+        
+        //3
+        containerView.addSubview(toViewController.view)
+        
+        //4
+        var circleMaskPathInitial = UIBezierPath(ovalInRect: button.frame)
+        var extremePoint = CGPoint(x: button.center.x - 0, y: button.center.y - CGRectGetMaxY(toViewController.view.bounds))
+        var radius = sqrt((extremePoint.x * extremePoint.x) + (extremePoint.y * extremePoint.y))
+        var circleMaskPathFinal = UIBezierPath(ovalInRect: CGRectInset(button.frame, -radius, -radius))
+        
+        //5
+        var maskLayer = CAShapeLayer()
+        maskLayer.path = circleMaskPathFinal.CGPath
+        toViewController.view.layer.mask = maskLayer
+        
+        //6
+        var maskLayerAnimation = CABasicAnimation(keyPath: "path")
+        maskLayerAnimation.fromValue = circleMaskPathInitial.CGPath
+        maskLayerAnimation.toValue = circleMaskPathFinal.CGPath
+        maskLayerAnimation.duration = self.transitionDuration(transitionContext)
+        maskLayerAnimation.delegate = self;
+        maskLayer.addAnimation(maskLayerAnimation, forKey: "path")
+    }
+    
 
+分步介绍：
+1. 创建一个指向 transitionContext 的引用
+2. 获得一些引用，包括 containnerView , fromViewController , toViewController , button 。 containerView 是动画发生的视图。在动画时， fromViewController 和 toViewController 是相同的部分。
+3. 将 toViewController 作为子视图添加到 containerView 上。
+4. 创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的。
+5. 创建一个 CAShapeLayer 来负责展示圆形遮盖。将它的 path 指定为最终的 path 来避免在动画完成后会回弹。
+6. 创建一个关于 path 的 CABasicAnimation 动画来从 circleMaskPathInitial.CGPath 到 circleMaskPathFinal.CGPath 。我们也指定了它的 delegate 来在完成动画时做一些清除工作。
+
+接下来，我们实现 *animationDidStop()* 方法来做一点的清除。
+
+    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+		self.transitionContext?.completeTransition(!self.transitionContext!.transitionWasCancelled())
+        self.transitionContext?.viewControllerForKey(UITransitionContextFromViewControllerKey)?.view.layer.mask = nil
+    }
+ 
+第一行告诉 iOS 这个 transition 完成。因为完成后我们才可以清除 mask 。
+
+最后一步我们要使用这个 *CircleTransitionAnimator* 。
+回到 NavigationControllerDelegate.swift 然后我们来修改下面方法。
+
+    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CircleTransitionAnimator()
+    }
+    
+运行程序，你将会看到下面的酷炫效果！
+
+![xcodeimg](http://cdn4.raywenderlich.com/wp-content/uploads/2014/10/circle.gif)
 
 ###An Interactive Gesture Animation
 
+一旦你的动画运行完成，你可能会把你的注意力放到另外一个 ViewController 切换的特性上: 一个允许交互的"返回"手势。由于只是点击已经过时，请确保你实现这个深度定制的 UI .
+
+交互手势开始会调用 *navigationController:interactionControllerForAnimationController:* 方法，这是导航控制器代理的一个方法，会返回一个 *UIViewControllerInteractiveTransitioning* 的对象。
+
+iOSSDK 提供给你一个类名字为 **UIPercentDrivenInteractiveTransition** ，它已经实现了上面的协议，而且可以让我们对交互手势做很多处理。
+
+打开 NavigationControllerDelegate.swift ，然后添加一个新属性和一个新方法。
+
+    var interactionController: UIPercentDrivenInteractiveTransition?
+    
+    func navigationController(navigationController: UINavigationController, interactionControllerForAnimationController animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return self.interactionController
+    }
+    
+现在回来继续思考这个交互手势。显而易见的是，你需要一个 gesture recognizer 。
+
+![funimg](http://cdn2.raywenderlich.com/wp-content/uploads/2014/12/i_knew_that-e1415860798288-326x320.png)
+
+你将会在导航视图控制器的代理中对导航控制器添加手势，那么首先我们需要一个导航控制器的引用。
+首先在 NavigationControllerDelegate.swift 添加一个属性。
+
+    @IBOutlet weak var navigationController: UINavigationController?
+    
+然后在 storyboard 中进行连线。
+
+![xcodeimg](http://cdn5.raywenderlich.com/wp-content/uploads/2014/10/Screenshot-2014-10-24-02.18.12-700x449.png)
+
+回到 NavigationControllerDelegate.swift 实现 *awakeFromNib()* 方法。
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        var panGesture = UIPanGestureRecognizer(target: self, action: Selector("panned:"))
+        self.navigationController!.view.addGestureRecognizer(panGesture)
+    }
+    
+创建了一个 pan gesture 。 然后实现它的 action 。
+
+    @IBAction func panned(gestureRecognizer: UIPanGestureRecognizer) {
+        switch gestureRecognizer.state {
+        //1
+        case .Began:
+            self.interactionController = UIPercentDrivenInteractiveTransition()
+            if self.navigationController?.viewControllers.count > 1 {
+                self.navigationController?.popViewControllerAnimated(true)
+            } else {
+                self.navigationController?.topViewController.performSegueWithIdentifier("PushSegue", sender: nil)
+            }
+        
+        //2
+        case .Changed:
+            var transition = gestureRecognizer.translationInView(self.navigationController!.view)
+            var completionProgress = transition.x / CGRectGetWidth(self.navigationController!.view.bounds)
+            self.interactionController?.updateInteractiveTransition(completionProgress)
+            
+        //3
+        case .Ended:
+            if (gestureRecognizer.velocityInView(self.navigationController!.view).x > 0) {
+                self.interactionController?.finishInteractiveTransition()
+            } else {
+                self.interactionController?.cancelInteractiveTransition()
+            }
+            self.interactionController = nil
+        
+        //4
+        default:
+            self.interactionController?.cancelInteractiveTransition()
+            self.interactionController = nil
+        }
+    }
+
+分步介绍:
+1. 开始的时候实例化了一个 **UIPercentDrivenInteractionTransition** 对象赋值给 interactionController 属性。 如果是 pop 比较容易, push 则需要执行 Segue 场景来实现。 另外角度说， push 或者 pop 会触发导航控制器的代理方法，返回 self.interactionController ，所以这个属性这时不会为空。
+2. 在变化的时候，你只需要根据进度去 update interactionController 即可，不需要做任何更多的复杂工作。
+3. 在结束时，根据当时的速率方向来确定完成这次交互或者取消。然后做清除工作。
+4. default只是做了一些清除工作。
+
+然后运行 app . 就可以用手指来控制这个动画了哦！
+
+![xcodeimg](http://cdn4.raywenderlich.com/wp-content/uploads/2014/10/circle-interactive.gif)
+
+
+注:这篇博客翻译自 raywenderlich.com 中的 [How To Make A View Controller Transition Animation Like in the Ping App][1]
+
+以上为本篇博客全部内容,欢迎提出建议,个人联系方式详见[关于][2]。
 
 
 
-
-
-
-
+[1]:http://www.raywenderlich.com/86521/how-to-make-a-view-controller-transition-animation-like-in-the-ping-app
+[2]:http://rannie.github.io/about
 
 
