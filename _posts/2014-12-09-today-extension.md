@@ -16,7 +16,8 @@ categories: iOS
 
 运行程序，会得到即时的价格通过 web 服务。
 
-![screenshot]()
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014120901.png)
+
 
 
 
