@@ -18,7 +18,9 @@ categories: iOS
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014120901.png)
 
+###BTC Widget
 
+BTC 即为 Bitcoin 的缩写。而即将编写的 Today Extension 则是这个应用视图的预览版本。
 
 
 
