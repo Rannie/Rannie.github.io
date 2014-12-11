@@ -192,12 +192,12 @@ categories: iOS
     }
     
 
-分步介绍：
-1. 创建一个指向 transitionContext 的引用
-2. 获得一些引用，包括 containnerView , fromViewController , toViewController , button 。 containerView 是动画发生的视图。在动画时， fromViewController 和 toViewController 是相同的部分。
-3. 将 toViewController 作为子视图添加到 containerView 上。
-4. 创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的。
-5. 创建一个 CAShapeLayer 来负责展示圆形遮盖。将它的 path 指定为最终的 path 来避免在动画完成后会回弹。
+分步介绍： <br/>
+1. 创建一个指向 transitionContext 的引用 <br/>
+2. 获得一些引用，包括 containnerView , fromViewController , toViewController , button 。 <br/>containerView 是动画发生的视图。在动画时， fromViewController 和 toViewController 是相同的部分。
+3. 将 toViewController 作为子视图添加到 containerView 上。 <br/>
+4. 创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的。 <br/>
+5. 创建一个 CAShapeLayer 来负责展示圆形遮盖。将它的 path 指定为最终的 path 来避免在动画完成后会回弹。 <br/>
 6. 创建一个关于 path 的 CABasicAnimation 动画来从 circleMaskPathInitial.CGPath 到 circleMaskPathFinal.CGPath 。我们也指定了它的 delegate 来在完成动画时做一些清除工作。
 
 接下来，我们实现 *animationDidStop()* 方法来做一点的清除。
@@ -293,10 +293,10 @@ iOSSDK 提供给你一个类名字为 **UIPercentDrivenInteractiveTransition** �
         }
     }
 
-分步介绍:
-1. 开始的时候实例化了一个 **UIPercentDrivenInteractionTransition** 对象赋值给 interactionController 属性。 如果是 pop 比较容易, push 则需要执行 Segue 场景来实现。 另外角度说， push 或者 pop 会触发导航控制器的代理方法，返回 self.interactionController ，所以这个属性这时不会为空。
-2. 在变化的时候，你只需要根据进度去 update interactionController 即可，不需要做任何更多的复杂工作。
-3. 在结束时，根据当时的速率方向来确定完成这次交互或者取消。然后做清除工作。
+分步介绍: <br/>
+1. 开始的时候实例化了一个 **UIPercentDrivenInteractionTransition** 对象赋值给 interactionController 属性。 如果是 pop 比较容易, push 则需要执行 Segue 场景来实现。 另外角度说， push 或者 pop 会触发导航控制器的代理方法，返回 self.interactionController ，所以这个属性这时不会为空。 <br/>
+2. 在变化的时候，你只需要根据进度去 update interactionController 即可，不需要做任何更多的复杂工作。 <br/>
+3. 在结束时，根据当时的速率方向来确定完成这次交互或者取消。然后做清除工作。 <br/>
 4. default只是做了一些清除工作。
 
 然后运行 app . 就可以用手指来控制这个动画了哦！
