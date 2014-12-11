@@ -205,16 +205,31 @@ BTC 即为 Bitcoin 的缩写。而即将编写的 Today Extension 则是这个�
         }
     }
     
-最后，我们经常需要在点击我们的 Today Extension 的某些组件的时候，能够跳入指定的程序，并传入一些参数跳到指定的页面。这需要我们为我们的 Container App 添加 URLSchema 然后让这个 Extension 触发某些行为时去 OpenURL: 即可。不过在 Extension 的 Controller 中， **UIApplication.sharedApplication()** 是 Unavailable 的。而苹果为扩展增加了一个 extensionContext 的引用，我们使用它来完成这个操作。
+最后，我们经常需要在点击我们的 Today Extension 的某些组件的时候，能够跳入指定的程序，并传入一些参数跳到指定的页面。这需要我们为我们的 Container App 添加 URLSchema 然后让这个 Extension 触发某些行为时去 *OpenURL:* 即可。不过在 Extension 的 Controller 中， **UIApplication.sharedApplication()** 是 Unavailable 的。而苹果为扩展增加了一个 extensionContext 的引用，我们使用它来完成这个操作。
 
 可以发现 Class NSExtensionContext 中有这样一个 method :
 
     // Asks the host to open an URL on the extension's behalf
     func openURL(URL: NSURL, completionHandler: ((Bool) -> Void)?)
     
-实现这个功能时，先注册 URLSchemaÅÅ
+实现这个功能时，先注册 URLSchema :
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014121101.png)
+
+之后我们在事件中直接 *OpenURL：* 即可。
+
+    @IBAction func toggleOpenApp(sender: AnyObject) {
+        let url = NSURL(string: "rannieTest://test")
+        extensionContext?.openURL(url!, completionHandler: nil)
+    }
+    
+至此，大部分的 Today Extension 功能都已实现。关于通知与 Container App 之间共享数据或者代码，可参考 [WWDC 2014 Session笔记 - iOS 通知中心扩展制作入门][4] 。
+
+以上为本篇博客全部内容,欢迎提出建议,个人联系方式详见[关于][5]。
 
 
 [1]:https://bitcoin.org/en/
 [2]:https://github.com/Rannie/AppExtensions/tree/master/Today%20Extension
 [3]:http://rannie.github.io/ios/2014/11/26/app-extension-introducing.html
+[4]:http://onevcat.com/2014/08/notification-today-widget/
+[5]:http://rannie.github.io/about
