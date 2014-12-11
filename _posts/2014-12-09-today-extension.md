@@ -12,7 +12,7 @@ categories: iOS
 ###Starter Project
 
 初始项目在可以去 [Today Extension][2] 下载。
-在这个项目里，我们不会更多的关注于 container app 的开发，而是更多的关注于编写 Today Extension 。 如果不太清楚 container app 的概念，可以看上一篇关于 App Extension 的文章：[App Extensions 学习笔记 --- 简介][3] 。
+在这个项目里，我们不会更多的关注于 container app 的开发，而是更多的关注于编写 Today Extension 。 如果不太清除 container app 的概念，可以看上一篇关于 App Extension 的文章：[App Extensions 学习笔记 --- 简介][3] 。
 
 运行程序，会得到即时的价格通过 web 服务。
 
@@ -21,8 +21,6 @@ categories: iOS
 ###BTC Widget
 
 BTC 即为 Bitcoin 的缩写。而即将编写的 Today Extension 则是这个应用视图的预览版本。
-
-####Add a Today Extension target
 
 
 
