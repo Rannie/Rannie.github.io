@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title:  "Location and Maps Programming Guide 要点"
@@ -6,6 +5,7 @@ date:   2014-12-14 21:27:00
 categories: iOS
 
 ---
+
 
 出于对 iBeacon 的学习诉求，这两天阅读了下苹果官方文档关于定位的部分。这篇博客主要将其中的重要部分取出来用中文叙述。
 如果想更详细的了解，还是要看原版文档：[Location and Maps Programming Guide][1]
