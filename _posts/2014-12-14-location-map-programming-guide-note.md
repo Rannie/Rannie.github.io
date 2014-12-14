@@ -57,6 +57,35 @@ iOS8 之后，*CLLocationManager* 新增了两个方法 *requestAlwaysAuthorizat
 
 如果你在监测区域或者使用显著位置变化服务，在有些情况下，你必须在启动应用同时启动位置服务。应用使用这些服务可以在挂起或者未运行情况下重启并接收位置数据。**不过**，尽管应用是重新启动，定位服务并不会自动启动。当一个应用是由于位置更新而重启时，*application:willFinishLaunchingWithOptions:* 或 *application:didFinishLaunchingWithOptions:* 的启动 option 字典会包含一个 *UIApplicationLaunchOptionsLocationKey* 键，该键的存在用于提示你新的位置数据正等待你去处理。为了获得这些数据，你必须建立一个新的 *CLLocationManager* 来重启之前已经终止的位置服务，当你重新启动了这些服务， locationManager 会通过代理将位置数据传递给你。
 
+###后台获取位置事件
+
+iOS 支持交付地点事件给后台挂起或者终止的应用。你有多个选项来后台获取位置数据，各有利弊。尽可能的使用显著位置服务来进行定位，如果需要的话，也可以配置后台模式的应用来使用基本定位服务。**提示**：由于用户可能会禁用后台运行模式，所以你可以由 *UIApplication* 的 *backgroundRefreshStatus* 属性来确定是否可以在后台处理位置更新。
+
+####在后台使用基本定位服务
+
+需要配置项目的 Capabilities 打开 BackgroundMode 并勾选 LocationUpdates 。这个在文章开头有提到过。不过在后台时，尽可能的不要做太多工作来处理新的数据。
+
+基于后台运行可能会耗费电力，你需要对你的定位进行额外的管理：
+
+* 确保 *location manager* 的 *pausesLocationUpdatesAutomatically* 属性是 YES , 这样 Core Location 会暂停位置更新(关闭定位硬件)当需要这么做的时候，比如用户不会移动时。（当它不会确定一个位置时，也会暂停）
+* 分配一个适当的值给 *location manager* 的 *activityType* 属性。此属性有助于确定何时可以安全的暂停位置更新。对于一个导航程序，把该属性设为 *CLActivityTypeAutomotiveNavigation* 会导致只有用户在一段时间内没有发生显著的位置变化时才会暂停位置更新事件。
+* 调用 *allowDeferredLocationUpdatesUntilTraveled:timeout:* 方法来尽可能的推迟交付位置数据的时间。具体参见章节<程序在后台时推迟位置更新>
+
+当 *location manager* 暂停位置更新，会调用代理方法 *locationManagerDidPauseLocationUpdates:* ，继续更新则调用 *locationManagerDidResumeLocationUpdates:* .可以使用这些方法来调整应用程序的行为。比如，当位置更新暂停，你可以使用这个代理通知来持久化数据或者完全停止位置更新。而导航应用则应该询问用户，是否导航应该暂停使用。
+
+####程序在后台时推迟位置更新
+
+在 iOS6 及以后，你可以在应用在后台时推迟位置更新数据的交付。推荐使用这个功能的原因是可以没有任何问题的处理定位数据。推迟更新可以让你的应用睡眠更长的时间。由于推迟位置更新需要有 GPS 硬件的存在，所以要调用 *CLLocationManager* 的类方法 *deferredLocationUpdatesAvailable* 来确定是否支持推迟更新。
+
+调用推迟的示例：
+
+	- (void)locationManager:(CLLocationManager *)manager	      didUpdateLocations:(NSArray *)locations {		   // Add the new locations to the hike		   [self.hike addLocations:locations];		   // Defer updates until the user hikes a certain distance		   // or when a certain amount of time has passed.		   if (!self.deferringUpdates) {		      CLLocationDistance distance = self.hike.goal - self.hike.distance;		      NSTimeInterval time = [self.nextAudible timeIntervalSinceNow];		      [locationManager allowDeferredLocationUpdatesUntilTraveled:distance		   	  self.deferringUpdates = YES;		   } 		}
+
+当你在调用 *allowDeferredLocationUpdatesUntilTraveled:timeout:* 方法指定的条件满足时， *location manager* 会回调 *locationManager:didFinishDeferredUpdatesWithError:* 来通知你已经停止了推迟数据交付。 *location mananger* 会确保回调该方法的次数与应用调用推迟方法的次数相同。推迟结束后，还是会通过 *locationManager:didUpdateLocations:* 来更新位置数据。
+
+您也可以通过调用 *CLLocationManager* 类的 *disallowDeferredLocationUpdates* 方法停止位置更新推迟。当你调用这个方法，或者干脆使用 *stopUpdatingLocation* 方法停止位置更新, *location manager* 会调用代理方法 *locationManager:didFinishDeferredUpdatesWithError:* 来通知你推迟被停止了。
+
+如果定位出错，会返回一些 *CLError* 参数来报告错误信息，若想了解可查 Core Location 参考中的 CLError 常量。
 
 
 
