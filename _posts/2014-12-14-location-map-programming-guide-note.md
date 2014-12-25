@@ -138,6 +138,48 @@ Core Location 提供两种位置监控方式，地理位置监控以及 beacon �
 你可以自定义两个属性来标明是否接收上述通知, *CLRegion* 类的 *notifyOnEntry* 和 *notifyOnExit* 。两个属性默认都为 YES 。当用户进入位置时，如果应用在后台你可以通过本地通知来通知用户，如果在前台则可以使用 alert 。
 
 
+####监测 Beacon 区域
+
+Beacon 地区监测主要通过 iOS 设备的无线电来监测是否在 Beacon 设备周围。与地理位置监测相同，你可以通过此功能来了解用户进入或者退出 Beacon 区域。 Beacon 设备标识是由一系列值来确定：
+
+* UUID , 128 位的唯一标识，用来标识一个或多个 beacon 作为某种确切类型或某个明确的组织。
+* major value , 16 位无符号整数，可以用来将周围相同 UUID 的 beacon 建组。 
+* minor value , 16 位无符号整数，用来区分相同 UUID 以及 major value 的不同 beacon 设备。
+
+#####定义一个 Beacon 区域
+
+使用 *CLBeaconRegion* 来定义一个 Beacon 区域, 需要一个 UUID (required) 和 major value, minor value (optional)， 另外也需要一个字符串来标识区域。
+
+	- (void)registerBeaconRegionWithUUID:(NSUUID *)proximityUUID	  andIdentifier:(NSString*)identifier {	     // Create the beacon region to be monitored.	     CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc]	        initWithProximityUUID:proximityUUID	                   identifier:identifier];	     // Register the beacon region with the location manager.	     [self.locManager startMonitoringForRegion:beaconRegion];	  }
+
+#####获取 Beacon 区域越界信息
+
+越境事件发生时同样会回调:
+
+* *locationManager:didEnterRegion:*
+* *locationManager:didExitRegion:*
+
+你可以自定义两个属性来标明是否接收上述通知, *CLRegion* 类的 *notifyOnEntry* 和 *notifyOnExit* 。两个属性默认都为 YES 。当用户进入位置时，如果应用在后台你可以通过本地通知来通知用户，如果在前台则可以使用 alert 。
+你也可以设置 beacon 区域的 *notifyEntryStateOnDisplay* 属性为 YES , *notifyOnEntry* 属性为 NO 。
+
+#####确定 Beacon 的测量范围
+
+当用户的设备在被测定的 beacon 区域内，应用可以使用 *CLLocationMananger* 的 *startRangingBeaconsInRegion:* 方法来确保接收到这个区域内的不同 beacon 设备的通知（在获取 beacon 范围前请确保调用 *CLLocationMananger* 的 *isRangingAvailable* 方法来检查是否可用）。知道到一个 beacon 设备的相对距离对很多应用十分有用。假设一个博物馆，在每个展品放置一个 beacon 。博物馆特有的应用程序可以使用特定展品的接近为线索，以提供有关展品的信息，而不是其他。
+
+location mananger 会回调 *locationManager:didRangeBeacons:inRegion:* 方法在设备相对这个 region 里的 beacon 距离接近或远去时。这个代理方法会提供这个范围内所有 CLBeacon 对象的数组。这个数组中的对象根据从近到远的顺序在数组中排列。你可以根据数组中的对象信息，来确定用户有多接近这些设备。CLBeacon 会提供相对距离。
+
+下面的代码提供了一个处理 beacon ranging 变化的时候来对数据进行处理。当用户足够接近时来进行相应的操作(通过常量 *CLProximityNear* 来判断)。
+
+	 // Delegate method from the CLLocationManagerDelegate protocol.	  - (void)locationManager:(CLLocationManager *)manager	          didRangeBeacons:(NSArray *)beacons	                 inRegion:(CLBeaconRegion *)region {	     if ([beacons count] > 0) {	        CLBeacon *nearestExhibit = [beacons firstObject];	        // Present the exhibit-specific UI only when	        // the user is relatively close to the exhibit.	        if (CLProximityNear == nearestExhibit.proximity) {				[self presentExhibitInfoWithMajorValue:nearestExhibit.major.integerValue]; 
+		 	} 	     	else {	       		[self dismissExhibitInfo];	     	}
+		}	}
+
+为了促进应用程序的结果一致性，使用范围灯塔仅在你的应用程序是在前台的情况下。如果你的应用是在前台，则很可能该设备是在用户的手而且该设备到目标 beacon 具有较少障碍物。在前台运行也促进了更好的电池寿命处理，只在用户主动使用该设备时输入传递信号。
+
+
+
+
+
 
 
 
