@@ -26,3 +26,5 @@ categories: iOS
 	
 由于我这个项目只是个简单的 project 并没有 workspace 所以命令需要去掉 *-workspace BuildDemo.xcworkspace* 这个参数。执行后会产生好多 log ， 下图为一部分 :
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122902.png)
+
