@@ -50,3 +50,7 @@ categories: iOS
 
 有的时候我们不仅仅是简单的设置 *configuration* 为 *Debug* 或 *Release* ，可能还有 AdHoc 版啊， Inhouse 版去给用户或者测试使用。这时候需要我们在项目中去配置更多的 *configuration* 。
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122906.png)
+
+点击箭头所在的地方我们可以添加比如 Debug.Inhouse Release.Adhoc Release.Inhouse
+
