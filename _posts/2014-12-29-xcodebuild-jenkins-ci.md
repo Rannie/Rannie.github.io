@@ -20,11 +20,11 @@ categories: iOS
 	
 	cd BuildDemo/
 
-打包成 .xcarchive
+打包成 .xcarchive 到 buildserver 目录下
 
 	xcodebuild -archivePath "/Users/mark/buildserver/BuildDemo.xcarchive" -workspace BuildDemo.xcworkspace -sdk iphoneos -scheme "BuildDemo" -configuration "Debug" archive
 	
 由于我这个项目只是个简单的 project 并没有 workspace 所以命令需要去掉 *-workspace BuildDemo.xcworkspace* 这个参数。执行后会产生好多 log ， 下图为一部分 :
 
-
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122903.png)
 
