@@ -43,3 +43,10 @@ categories: iOS
 执行后依旧生成 log ， 最后是 \** EXPORT SUCCEEDED **
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122905.png)
+
+使用 xcodebuild 生成 ipa 文件就完成了。
+
+####指定 Configuration 和配置文件来生成 IPA 文件
+
+有的时候我们不仅仅是简单的设置 *configuration* 为 *Debug* 或 *Release* ，可能还有 AdHoc 版啊， Inhouse 版去给用户或者测试使用。这时候需要我们在项目中去配置更多的 *configuration* 。
+
