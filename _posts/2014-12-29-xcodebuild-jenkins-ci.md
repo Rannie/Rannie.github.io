@@ -52,5 +52,19 @@ categories: iOS
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122906.png)
 
-点击箭头所在的地方我们可以添加比如 Debug.Inhouse Release.Adhoc Release.Inhouse
+点击箭头所在的地方我们可以添加比如 Debug.Inhouse Release.Adhoc Release.Inhouse 
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122907.png)
+
+我们需要在 *target* 的 *buildsettings* 中去指定不同的配置，比如代码签名和配置文件
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122908.png)
+
+或者是针对不同版本指定不同的宏， *BundleID* ， *BundleDisplayName* 等等。
+
+然后我们使用 xcodebuild 时可以生成不同版本的 xcarchive 以及 ipa 文件了，举个例子，比如我想根据 Adhoc 的配置去打包则命令如下
+
+	xcodebuild -archivePath "/Users/mark/buildserver/BuildDemo.Adhoc.xcarchive" -sdk iphoneos -scheme "BuildDemo" -configuration "Release.Adhoc" archive
+
+	xcodebuild -exportArchive -exportFormat IPA -exportProvisioningProfile "指定的配置文件名称" -archivePath "/Users/mark/buildserver/BuildDemo.Adhoc.xcarchive" -exportPath "/Users/mark/buildserver/BuildDemo.Adhoc.ipa"
+	
