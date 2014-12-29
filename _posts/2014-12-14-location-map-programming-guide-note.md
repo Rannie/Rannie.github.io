@@ -176,14 +176,27 @@ location mananger 会回调 *locationManager:didRangeBeacons:inRegion:* 方法�
 
 为了促进应用程序的结果一致性，使用范围灯塔仅在你的应用程序是在前台的情况下。如果你的应用是在前台，则很可能该设备是在用户的手而且该设备到目标 beacon 具有较少障碍物。在前台运行也促进了更好的电池寿命处理，只在用户主动使用该设备时输入传递信号。
 
+####让一个 iOS 设备成为 iBeacon
 
+所有的 iOS 设备支持使用蓝牙成为 iBeacon 分享数据。要求你的 iOS 设备始终在前台运行无论是测试还是应用。对于其他的 iBeacon 实现，你需要获得来自第三方制造商的专用 beacon 硬件。
 
+使你的设备成为 beacon 需要链接库 *<CoreBluetooth>*
 
+#####创建和标记一个 Beacon 区域
 
+你首先需要生成一个 128 位的 UUID 来作为你的 beacon 区域的接近 UUID . 打开终端，然后使用 **uuidgen** 指令来生成 UUID . 类似如下 :
 
+	$ uuidgen	39ED98FF-2900-441A-802F-9C398FC199D2
+然后利用 UUID 生成灯塔区域 :
+	NSUUID *proximityUUID = [[NSUUID alloc]	   initWithUUIDString:@"39ED98FF-2900-441A-802F-9C398FC199D2"];	// Create the beacon region.	CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc]	   initWithProximityUUID:proximityUUID	              identifier:@"com.mycompany.myregion"];
 
+现在，你已经创建了一个 Beacon 区域，你需要使用 *CoreBluetooth* 框架下的 *CBPeripheralManager* 类来通告你的 beacon 的附近 UUID 。通告你的 beacon 数据是让其他设备监测你的 beacon 的唯一方式。
 
+使用 *CBPeripheralManager* 的实例分享数据方法如下:
 
+	// Create a dictionary of advertisement data.	NSDictionary *beaconPeripheralData =	   [beaconRegion peripheralDataWithMeasuredPower:nil];	// Create the peripheral manager.	CBPeripheralManager *peripheralManager = [[CBPeripheralManager alloc]	   initWithDelegate:self queue:nil options:nil];	// Start advertising your beacon's data.	[peripheralManager startAdvertising:beaconPeripheralData];
+
+相关回调方法 *peripheralManagerDidUpdateState:* .你必须实现此委托方法，以确保蓝牙低功耗支持，并提供给本地外围设备上使用。
 
 
 
