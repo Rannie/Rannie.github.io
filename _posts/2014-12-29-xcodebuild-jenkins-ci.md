@@ -68,3 +68,12 @@ categories: iOS
 
 	xcodebuild -exportArchive -exportFormat IPA -exportProvisioningProfile "指定的配置文件名称" -archivePath "/Users/mark/buildserver/BuildDemo.Adhoc.xcarchive" -exportPath "/Users/mark/buildserver/BuildDemo.Adhoc.ipa"
 	
+打包完成
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122910.png)
+
+### Jenkins CI
+
+
+### Apache 分享文件目录
+
