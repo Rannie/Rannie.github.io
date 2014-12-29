@@ -11,4 +11,18 @@ categories: iOS
 ###Xcodebuild 打包
 
 只要安装了 Xcode , 就可以在命令行里使用 xcodebuild 命令进行打包。
-假设我有个需要打包的工程，在个人目录下。
+假设我有个需要打包的工程 *BuildDemo* ，在个人( *mark* )目录下。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122901.png)
+
+我现在想把它打包成 ipa 格式的文件则需要打开终端。
+首先进入项目:
+	
+	cd BuildDemo/
+
+打包成 .xcarchive
+
+	xcodebuild -archivePath "/Users/mark/buildserver/BuildDemo.xcarchive" -workspace BuildDemo.xcworkspace -sdk iphoneos -scheme "BuildDemo" -configuration "Debug" archive
+	
+由于我这个项目只是个简单的 project 并没有 workspace 所以命令需要去掉 *-workspace BuildDemo.xcworkspace* 这个参数。执行后会产生好多 log ， 下图为一部分 :
+
