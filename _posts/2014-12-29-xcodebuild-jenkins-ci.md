@@ -129,6 +129,7 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 	
 这个 http 端口 9000 可以根据情况自由指定。
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123003.png)
 
 
 
