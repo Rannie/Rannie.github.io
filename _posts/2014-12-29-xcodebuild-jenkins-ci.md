@@ -78,6 +78,49 @@ categories: iOS
 
 ### Jenkins CI
 
+####Java 环境
+
+Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
+
+*安装 JDK 8 可能会遇到的问题* ：
+
+安装 JDK 8 可能在一开始提示: "This Installer is supported only on OS X 10.7.3 or Later",这是由于安装包中的一个函数发生了错误，我们需要将函数修改后重新打包。
+
+流程:
+
+1. 打开下载好的 jdk 安装包的 DMG .这时候你会在 finder 左侧能看到已经被挂上了。
+2. bash 中运行：pkgutil --expand /Volumes/JDK\ 8\ Update\ 05/JDK\ 8\ Update\ 05.pkg /tmp/jdk8.unpkg (解释：通过 pkgutil 命令把刚刚下载好的 dmg 解压开来，存放到 /tmp/jdk8.unpkg 这个目录中去。)
+3. 走入到 /tmp/jdk8.unpkg 目录中去。你可以通过 finder 也可以通过终端命令进入。
+4. 找到目录下的 Distribution 文件，用vim或者是编辑器 (open -e) 打开。
+5. cmd+f找到里面的 pm_install_check 这个函数。
+
+		function pm_install_check() {
+		  if(!(checkForMacOSX('10.7.3') == true)) {
+		    my.result.title = 'OS X Lion required';
+		    my.result.message = 'This Installer is supported only on OS X 10.7.3 or Later.';
+		    my.result.type = 'Fatal';
+		    return false;
+		  }
+		  return true;
+		}
+	
+	修改成：
+	
+		function pm_install_check() {
+		  return true;
+		}
+		
+	保存。
+
+6. 然后我们重新打包。命令如下：
+	pkgutil --flatten /tmp/jdk8.unpkg/ /tmp/jdk8.pkg
+7. 打开 /tmp/jdk8.pkg 文件。
+	open /tmp/jdk8.pkg 或者是从 finder 中找到并点击打开，你就会发现可以正常安装了。
+	
+####下载运行配置 Jenkins
+
+
+
 
 ### Apache 分享文件目录
 
