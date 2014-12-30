@@ -119,8 +119,37 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 	
 ####下载运行配置 Jenkins
 
+去 Jenkins [官网][1]下载 Web Archive (.war)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123002.png)
+
+下载后进入该 .war 目录执行 
+
+	java -jar jenkins.war --httpPort=9000
+	
+这个 http 端口 9000 可以根据情况自由指定。
+
 
 
 
 ### Apache 分享文件目录
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1]:http://jenkins-ci.org/
