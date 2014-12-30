@@ -117,7 +117,7 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 7. 打开 /tmp/jdk8.pkg 文件。
 	open /tmp/jdk8.pkg 或者是从 finder 中找到并点击打开，你就会发现可以正常安装了。
 	
-####下载运行配置 Jenkins
+####下载运行 Jenkins
 
 去 Jenkins [官网][1]下载 Web Archive (.war)
 
@@ -135,9 +135,26 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 
 打开浏览器，输入 localhost:9000 可以看到
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123004.png)
 
 
+####配置服务及添加构建
 
+一开始我们可以做一些基础配置
+
+点击左侧的*系统管理*
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123005.png)
+
+最上面有个执行者数量表示可以同时执行的 Build 数，同时 Build 同一个项目可能会发生一些问题，我会将其更改为1，其他触发的 Build 则会加入到队列中等待之前的 Build 完成才开始构建。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123006.png)
+
+这里设置 Jenkins 的 URL 以及系统管理员的邮箱。在公司里可能我们需要一台机器专门进行持续集成，那么需要这台机器手动指定 IP ，邮箱则是可以在构建失败的时候，将失败的 Log 发送到指定的开发人员邮箱中，让开发人员得知 svn 或者 git 等代码 Build 会有问题。不过我们需要指定 SMTP 地址，系统管理员的邮箱也需要开通 SMTP 服务。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123007.png)
+
+设置完成后可以勾选 *通过发送测试邮件测试配置* 来先尝试发送一个测试邮件。
 
 ### Apache 分享文件目录
 
