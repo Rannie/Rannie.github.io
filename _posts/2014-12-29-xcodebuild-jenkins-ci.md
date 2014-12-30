@@ -72,6 +72,10 @@ categories: iOS
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014122910.png)
 
+>> **注意**： 如果你的 workspace 使用了 *CocoaPods* 那么需要也为你的 Pods 工程添加 *configuration* ，下图为我为其他 workspace 添加的 *configuration* 。
+
+
+
 ### Jenkins CI
 
 
