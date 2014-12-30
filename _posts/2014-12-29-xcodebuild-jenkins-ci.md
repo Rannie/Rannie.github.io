@@ -131,6 +131,12 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123003.png)
 
+看到红色标识的 log 标明 Jenkins 服务已经运行。
+
+打开浏览器，输入 localhost:9000 可以看到
+
+
+
 
 
 ### Apache 分享文件目录
