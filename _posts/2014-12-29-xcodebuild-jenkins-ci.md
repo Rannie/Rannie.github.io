@@ -235,24 +235,29 @@ Mac 下自带 Apache 服务，所以并不需要很多的步骤，只要打开�
 
 如果你的系统是 Yosemite ，则需要对 apache 的 httpconfig 进行一些修改才可以分享个人目录。
 
-/etc/apache2/httpd.conf 找到下面的行去掉前面的＃
+找到下面的位置，改成想分享出去的指定目录。
+并添加 "Indexes"
 
-\# LoadModule php5_module libexec/apache2/libphp5.so <br />
-\# LoadModule userdir_module libexec/apache2/mod_userdir.so <br />
-\# Include /private/etc/apache2/extra/httpd-userdir.conf <br />
-\# LoadModule authz_core_module libexec/apache2/mod_authz_core.so <br />
-\# LoadModule authz_host_module libexec/apache2/mod_authz_host.so <br />
-
-/etc/apache2/extra/httpd-userdir.conf  找到下面的行去掉前面的＃
-
-\# Include /private/etc/apache2/users/*.conf
-
-如果已经去掉则不用处理，这样我们就可以通过 localhost/~$user_name 来访问个人目录了。
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010216.png)
 
 如果没有权限更改上述文件，简单的可以先拖到桌面上来进行修改然后放回之前位置覆盖即可。
 
+更改完成后重启 apache 服务。
+
+然后我们再访问 localhost 或 127.0.0.1 就可以发现可以访问指定的文件夹下的文件了。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010217.png)
+
+这些 ipa 可以直接点击下载即可。由于在公司中可能指定机器的 ip 会更换，可以通过更改网络偏好配置来设置手动 ip 。这样以后其他人就可以通过指定的 ip 来直接访问这个文件目录了。每次构建完成后，每个人都可以自己打开浏览器下载最新的 ipa 即可。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010218.png)
 
 
+至此，使用 xcodebuild + jenkins + apache 来做 ios 项目基本的持续集成步骤已经全部完成。
+
+-- EOF --
+
+欢迎提出建议,个人联系方式详见[关于][3]。
 
 
 
@@ -264,3 +269,4 @@ Mac 下自带 Apache 服务，所以并不需要很多的步骤，只要打开�
 
 [1]:http://jenkins-ci.org/
 [2]:https://github.com/facebook/xctool
+[3]:http://rannie.github.io/about
