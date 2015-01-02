@@ -158,7 +158,25 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 
 ####添加一个构建
 
+在首页我们点击*添加一个新的构建*
 
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010201.png)
+
+填写构建的名称及类型，这里勾选的是自由风格的软件项目。
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010202.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010203.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010204.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010205.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010206.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010207.png)
+
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010208.png)
 
 ### Apache 分享文件目录
 
