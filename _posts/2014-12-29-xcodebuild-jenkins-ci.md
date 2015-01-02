@@ -176,7 +176,7 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015010202.png)
 
-如果你想执行一些定制化的构建，可以使用一些自己编写或开源的 shell 脚本，比如 Facebook 的 xctool : [https://github.com/facebook/xctool][2]
+如果你想执行一些定制化的构建，可以使用一些自己编写或开源的脚本，比如 Facebook 的 xctool : [https://github.com/facebook/xctool][2]
 
 在构建中我们可以加入一些参数。点击 command 下的查看环境变量的参数列表。
 
