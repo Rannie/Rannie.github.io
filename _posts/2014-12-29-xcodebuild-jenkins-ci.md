@@ -138,7 +138,7 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123004.png)
 
 
-####配置服务及添加构建
+####配置服务
 
 一开始我们可以做一些基础配置
 
@@ -155,6 +155,10 @@ Jenkins 需要 Java 环境来运行，如果没有需要自行下载。
 ![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014123007.png)
 
 设置完成后可以勾选 *通过发送测试邮件测试配置* 来先尝试发送一个测试邮件。
+
+####添加一个构建
+
+
 
 ### Apache 分享文件目录
 
