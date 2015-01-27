@@ -51,16 +51,16 @@ categories: iOS
 
 下面在 AppDelegate 中将 MasterViewController 的视图添加进去：
 
-```
-var masterViewController: MasterViewController!
 
-func applicationDidFinishLaunching(aNotification: NSNotification) {
-  masterViewController = MasterViewController(nibName: "MasterViewController", bundle: nil)
-  window.contentView.addSubview(masterViewController.view)
-  masterViewController.view.frame = (window.contentView as NSView).bounds
-}
+	var masterViewController: MasterViewController!
 
-```
+	func applicationDidFinishLaunching(aNotification: NSNotification) {
+	masterViewController = MasterViewController(nibName: "MasterViewController", bundle: nil)
+	window.contentView.addSubview(masterViewController.view)
+	masterViewController.view.frame = (window.contentView as NSView).bounds
+	}
+
+
 
 我们初始化了一个 MasterViewController 实例然后把它加到了 window 上并且设置了 frame 。
 
@@ -90,50 +90,49 @@ func applicationDidFinishLaunching(aNotification: NSNotification) {
 
 类的初始属性及构造器代码
 
-```
-class ScaryBugData: NSObject {
-  var title: String
-  var rating: Double
-  
-  override init() {
-    self.title = String()
-    self.rating = 0.0
-  }
-  
-  init(title: String, rating: Double) {
-    self.title = title
-    self.rating = rating
-  }
-}
-```
+
+	class ScaryBugData: NSObject {
+	  var title: String
+	  var rating: Double
+	  
+	  override init() {
+	    self.title = String()
+	    self.rating = 0.0
+	  }
+	  
+	  init(title: String, rating: Double) {
+	    self.title = title
+	    self.rating = rating
+	  }
+	}
+
 
 创建 ScaryBugDoc 类
 
-```
-class ScaryBugDoc: NSObject {
-  var data: ScaryBugData
-  var thumbImage: NSImage?
-  var fullImage: NSImage?
-  
-  override init() {
-    self.data = ScaryBugData()
-  }
-  
-  init(title: String, rating: Double, thumbImage: NSImage?, fullImage: NSImage?) {
-    self.data = ScaryBugData(title: title, rating: rating)
-    self.thumbImage = thumbImage
-    self.fullImage = fullImage
-  }
-}
-```
+
+	class ScaryBugDoc: NSObject {
+	  var data: ScaryBugData
+	  var thumbImage: NSImage?
+	  var fullImage: NSImage?
+	  
+	  override init() {
+	    self.data = ScaryBugData()
+	  }
+	  
+	  init(title: String, rating: Double, thumbImage: NSImage?, fullImage: NSImage?) {
+	    self.data = ScaryBugData(title: title, rating: rating)
+	    self.thumbImage = thumbImage
+	    self.fullImage = fullImage
+	  }
+	}
+
 
 现在我们有了数据模型，接下来我们需要创建一些数据并保存到一个数组中。
 
 在 MasterViewController 中添加一个属性
 
-```
-var bugs = [ScaryBugDoc]()
-```
+	var bugs = [ScaryBugDoc]()
+
 
 ##Scary bug pictures and sample data
 
