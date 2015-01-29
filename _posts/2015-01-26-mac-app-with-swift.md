@@ -136,13 +136,32 @@ categories: iOS
 
 ##Scary bug pictures and sample data
 
+现在我们还没有数据，可以先[下载图片][2]。
 
+有了图片之后我们可以创建一些示例数据：
 
+	func setupSampleBugs() {
+	    let bug1 = ScaryBugDoc(title: "Potato Bug", rating: 4.0,
+	      thumbImage:NSImage(named: "potatoBugThumb"), fullImage: NSImage(named: "potatoBug"))
+	    let bug2 = ScaryBugDoc(title: "House Centipede", rating: 3.0,
+	      thumbImage:NSImage(named: "centipedeThumb"), fullImage: NSImage(named: "centipede"))
+	    let bug3 = ScaryBugDoc(title: "Wolf Spider", rating: 5.0,
+	      thumbImage:NSImage(named: "wolfSpiderThumb"), fullImage: NSImage(named: "wolfSpider"))
+	    let bug4 = ScaryBugDoc(title: "Lady Bug", rating: 1.0,
+	      thumbImage:NSImage(named: "ladybugThumb"), fullImage: NSImage(named: "ladybug"))
+	    
+	    bugs = [bug1, bug2, bug3, bug4]
+	}
 
+然后我们可以在 *appdelegate* 中 contentView addSubview 之前加载这些示例数据。
 
 ##A Different Kind of Bug List
 
+下面就是要把我们的示例数据显示到 tableview 中。
 
+在 OS X 中， NSTableView 与 iOS 中的 UITableView 最主要的区别就是 NSTableView 可以显示多列。
+
+打开
 
 
 
@@ -159,3 +178,4 @@ categories: iOS
 
 
 [1]:http://www.raywenderlich.com/87002/getting-started-with-os-x-and-swift-tutorial-part-1
+[2]:http://d1xzuxjlafny7l.cloudfront.net/downloads/ScaryBugs.zip
