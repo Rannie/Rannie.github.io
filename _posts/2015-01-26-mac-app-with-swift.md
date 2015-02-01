@@ -161,21 +161,54 @@ categories: iOS
 
 在 OS X 中， NSTableView 与 iOS 中的 UITableView 最主要的区别就是 NSTableView 可以显示多列。
 
-打开
+打开 MasterViewController.xib 确保 tableview 的 Content Mode 是 View Based, 配置不显示头部，勾选 Alternating Rows 来保证行交替颜色变化，
 
+![xcode](http://cdn5.raywenderlich.com/wp-content/uploads/2014/11/smats-tableviewproperties-700x403.png)
 
+下一步是配置 tableview 的 cell 。我们需要一个图片和一个文本区域来显示信息。 NSTableCellView 已经存在这种类型的 cell 我们可以直接使用。打开 IB 对象面板寻找 *Image & Text Table Cell View* 然后拖到 TableView 中。
 
+然后我们调整尺寸，设置 Cell 的 Identifier :
 
+![xcode](http://cdn3.raywenderlich.com/wp-content/uploads/2014/11/smats-tableviewcellproperties-700x470.png)
 
+![xcode](http://cdn2.raywenderlich.com/wp-content/uploads/2014/11/smats-bugcolumn-700x470.png)
 
+下一步我们要给 TableView 设置数据源和代理
 
+![xcode](http://cdn1.raywenderlich.com/wp-content/uploads/2014/11/smats-connectdelegate-700x448.png)
 
+最后就是写 TableView 的方法了
 
+	extension MasterViewController: NSTableViewDataSource {
+	  func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+	    return self.bugs.count
+	  }
+	  
+	  func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+	    var cellView: NSTableCellView = tableView.makeViewWithIdentifier(tableColumn?.identifier, owner: self) as NSView!
+	    
+	    if tableColumn?.identifier == "BugColumn" {
+	      let bugDoc = bugs[row] as ScaryBugDoc
+	      cellView.imageView!.image = bugDoc.thumbImage
+	      cellView.textField!.stringValue = bugDoc.data.title
+	    }
+	    
+	    return cellView
+	  }
+	}
 
+两个数据源方法，跟 UITableView 的用法极其相似，唯一不同在于 Cell 的数据源方法稍有不同，由于有多列的情况可能存在，所以多了一个列的参数。其余的都很相近。
 
+然后运行程序
 
+![xcode](http://cdn3.raywenderlich.com/wp-content/uploads/2014/11/smats-part1app.png)
 
+这样我们的第一个使用 Swift 编写的 OS X 应用就初步完成了。
 
+-- EOF --
+
+欢迎提出建议,个人联系方式详见[关于][3]。
 
 [1]:http://www.raywenderlich.com/87002/getting-started-with-os-x-and-swift-tutorial-part-1
 [2]:http://d1xzuxjlafny7l.cloudfront.net/downloads/ScaryBugs.zip
+[3]:http://rannie.github.io/about
