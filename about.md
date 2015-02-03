@@ -12,6 +12,7 @@ permalink: /about/
 ------
 
 <br>
+
 ###开发过的 APP
 
 ####糖护士手机血糖仪  
@@ -39,6 +40,7 @@ permalink: /about/
 ------
 
 <br>
+
 ###联系方式
 
 Weibo: [CocoaRannie](http://weibo.com/lhrannie)<br />
