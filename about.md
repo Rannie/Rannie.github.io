@@ -10,7 +10,7 @@ permalink: /about/
 
 ###开发过的 APP
 
-
+![screenshot](https://raw.github.com/Rannie/Rannie.github.io/master/images/2014120913.png)
 
 
 ###联系方式
