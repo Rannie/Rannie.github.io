@@ -4,10 +4,12 @@ title: 关于
 permalink: /about/
 ---
 
+-------
 目前从事iOS开发工作。喜欢Objective-C以及Swift语言。熟悉C以及Java。偶尔写写博客，之前的博客在CSDN上[BLOG](http://blog.csdn.net/cocoarannie) 
 
 偶尔写一些小的项目放到GitHub上。目前打算争取利用更多的时间把代码进行重构，发布到个人仓库中。[GitHub地址](https://github.com/Rannie) 
 
+------
 ###开发过的 APP
 
 ####糖护士手机血糖仪  
@@ -31,6 +33,7 @@ permalink: /about/
 <img src="https://raw.github.com/Rannie/Rannie.github.io/master/images/uyuanbao.png" width="60" >
 [iTunes链接](https://itunes.apple.com/cn/app/id929088481?mt=8)
 
+------
 ###联系方式
 
 Weibo: [CocoaRannie](http://weibo.com/lhrannie)<br />
