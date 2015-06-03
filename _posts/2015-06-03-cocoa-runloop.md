@@ -313,7 +313,69 @@ CADisplayLink 是一个和屏幕刷新率一致的定时器（但实际实现原
 
 ###RunLoop 与 GCD
 
+实际上 RunLoop 底层也会用到 GCD 的东西，比如 RunLoop 是用 dispatch_source_t 实现的 Timer。但同时 GCD 提供的某些接口也用到了 RunLoop， 例如 dispatch_async()。
 
+当调用 dispatch_async(dispatch_get_main_queue(), block) 时，libDispatch 会向主线程的 RunLoop 发送消息，RunLoop会被唤醒，并从消息中取得这个 block，并在回调 \__CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE\__() 里执行这个 block。但这个逻辑仅限于 dispatch 到主线程，dispatch 到其他线程仍然是由 libDispatch 处理的。
+
+dispatch_after 同理。
+
+###RunLoop 与网络请求
+
+通常使用 NSURLConnection 时，你会传入一个 Delegate，当调用了 [connection start] 后，这个 Delegate 就会不停收到事件回调。实际上，start 这个函数的内部会会获取 CurrentRunLoop，然后在其中的 DefaultMode 添加了4个 Source0 (即需要手动触发的Source)。CFMultiplexerSource 是负责各种 Delegate 回调的，CFHTTPCookieStorage 是处理各种 Cookie 的。
+
+当开始网络传输时，我们可以看到 NSURLConnection 创建了两个新线程：com.apple.NSURLConnectionLoader 和 com.apple.CFSocket.private。其中 CFSocket 线程是处理底层 socket 连接的。NSURLConnectionLoader 这个线程内部会使用 RunLoop 来接收底层 socket 的事件，并通过之前添加的 Source0 通知到上层的 Delegate。
+
+<img src=http://blog.ibireme.com/wp-content/uploads/2015/05/RunLoop_network.png width = 90%>
+
+NSURLConnectionLoader 中的 RunLoop 通过一些基于 mach port 的 Source 接收来自底层 CFSocket 的通知。当收到通知后，其会在合适的时机向 CFMultiplexerSource 等 Source0 发送通知，同时唤醒 Delegate 线程的 RunLoop 来让其处理这些通知。CFMultiplexerSource 会在 Delegate 线程的 RunLoop 对 Delegate 执行实际的回调。
+
+#####AFNetworking
+
+AFURLConnectionOperation 这个类是基于 NSURLConnection 构建的，其希望能在后台线程接收 Delegate 回调。为此 AFNetworking 单独创建了一个线程，并在这个线程中启动了一个 RunLoop：
+
+
+	+ (void)networkRequestThreadEntryPoint:(id)__unused object {
+	    @autoreleasepool {
+	        [[NSThread currentThread] setName:@"AFNetworking"];
+	        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+	        [runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];
+	        [runLoop run];
+	    }
+	}
+	 
+	+ (NSThread *)networkRequestThread {
+	    static NSThread *_networkRequestThread = nil;
+	    static dispatch_once_t oncePredicate;
+	    dispatch_once(&oncePredicate, ^{
+	        _networkRequestThread = [[NSThread alloc] initWithTarget:self selector:@selector(networkRequestThreadEntryPoint:) object:nil];
+	        [_networkRequestThread start];
+	    });
+	    return _networkRequestThread;
+	}
+	
+RunLoop 启动前内部必须要有至少一个 Timer/Observer/Source，所以 AFNetworking 在 [runLoop run] 之前先创建了一个新的 NSMachPort 添加进去了。通常情况下，调用者需要持有这个 NSMachPort (mach_port) 并在外部线程通过这个 port 发送消息到 loop 内；但此处添加 port 只是为了让 RunLoop 不至于退出，并没有用于实际的发送消息。
+
+	- (void)start {
+	    [self.lock lock];
+	    if ([self isCancelled]) {
+	        [self performSelector:@selector(cancelConnection) onThread:[[self class] networkRequestThread] withObject:nil waitUntilDone:NO modes:[self.runLoopModes allObjects]];
+	    } else if ([self isReady]) {
+	        self.state = AFOperationExecutingState;
+	        [self performSelector:@selector(operationDidStart) onThread:[[self class] networkRequestThread] withObject:nil waitUntilDone:NO modes:[self.runLoopModes allObjects]];
+	    }
+	    [self.lock unlock];
+	}
+
+当需要这个后台线程执行任务时，AFNetworking 通过调用 [NSObject performSelector:onThread:..] 将这个任务扔到了后台线程的 RunLoop 中。
+
+
+以上就是这篇文章的全部内容，上面大部分的内容摘抄以及参考自:
+
+* [深入理解 RunLoop](http://blog.ibireme.com/2015/05/18/runloop/)
+* [优化UITableViewCell高度计算的那些事](http://blog.sunnyxx.com/2015/05/17/cell-height-calculation/)
+* [SunnyXX](http://weibo.com/u/1364395395?from=feed&loc=nickname) 的[技术分享视频](http://yun.baidu.com/s/1eQvk3rO)
+
+欢迎提出建议,个人联系方式详见 [关于](http://rannie.github.io/about)。
 
 
 
