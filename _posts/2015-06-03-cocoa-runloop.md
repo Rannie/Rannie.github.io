@@ -132,7 +132,7 @@ CFRunLoopMode 和 CFRunLoop 的结构大致如下：
 
 这里有张图清晰的标明了 RunLoop 从开启到执行任务到休眠到唤醒到退出的声明周期。
 
-<img src=http://blog.ibireme.com/wp-content/uploads/2015/05/RunLoop_1.png width=80%>
+![img](http://blog.ibireme.com/wp-content/uploads/2015/05/RunLoop_1.png)
 
 由于 CoreFoundation 开源了 RunLoop 的源代码,整理下大概如下所标示:
 
@@ -325,7 +325,7 @@ dispatch_after 同理。
 
 当开始网络传输时，我们可以看到 NSURLConnection 创建了两个新线程：com.apple.NSURLConnectionLoader 和 com.apple.CFSocket.private。其中 CFSocket 线程是处理底层 socket 连接的。NSURLConnectionLoader 这个线程内部会使用 RunLoop 来接收底层 socket 的事件，并通过之前添加的 Source0 通知到上层的 Delegate。
 
-<img src=http://blog.ibireme.com/wp-content/uploads/2015/05/RunLoop_network.png width = 90%>
+![img](http://blog.ibireme.com/wp-content/uploads/2015/05/RunLoop_network.png)
 
 NSURLConnectionLoader 中的 RunLoop 通过一些基于 mach port 的 Source 接收来自底层 CFSocket 的通知。当收到通知后，其会在合适的时机向 CFMultiplexerSource 等 Source0 发送通知，同时唤醒 Delegate 线程的 RunLoop 来让其处理这些通知。CFMultiplexerSource 会在 Delegate 线程的 RunLoop 对 Delegate 执行实际的回调。
 
