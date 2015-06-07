@@ -61,7 +61,7 @@ NSNumber numberWith*:
 
 生成器模式两个重要的角色：Director (指导者) 和 Builder (生成器)
 
-![construct](http://d.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=7de5856df4246b606f03ba268a917129/838ba61ea8d3fd1f82d87904324e251f95ca5f3f.jpg)
+![construct](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060701.jpg)
 
 ##接口适配
 
@@ -73,7 +73,7 @@ NSNumber numberWith*:
 
 两种方式：类的继承（类适配器）与实现协议（对象适配器）
 
-![adaptor](http://f.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=46ac951a3a12b31bd361c57be7715d1f/0df431adcbef76097e1790c22ddda3cc7cd99e4a.jpg)
+![adaptor](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060702.jpg)
 
 ###桥接模式
 
@@ -89,7 +89,7 @@ NSNumber numberWith*:
 * 如果每个实现需要额外的子类以细化抽象，则说明有必要把它们分成两个部分
 * 想在带有不同抽象接口的多个对象之间共享一个实现
 
-![bridge](http://f.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=63068dbf90529822113e3191b6a310ae/b2de9c82d158ccbf49a4044219d8bc3eb13541a9.jpg)
+![bridge](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060703.jpg)
 
 ###外观模式
 
@@ -100,7 +100,7 @@ NSNumber numberWith*:
 * 子系统正逐渐变得复杂。应用模式的过程中演化出许多类。可以使用外观为这些子系统类提供一个较简单的接口。
 * 可以使用外观对子系统进行分层。每个子系统级别有一个外观作为入口点。让它们通过其外观进行通信，可以简化它们的依赖关系。
 
-![](http://e.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=2ba2bd0eb899a9012f3853647cfc611e/4ec2d5628535e5ddd383c4c576c6a7efce1b6278.jpg)
+![](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060704.jpg)
 
 
 ##对象去耦
@@ -161,7 +161,7 @@ NSNumber numberWith*:
 | 客户端创建并维护外部迭代器 | 集合对象本身创建并维护它的外部迭代器 |
 | 客户端可以使用不同外部迭代器实现多种类型的遍历 | 集合对象可以在不修改客户端代码的情况下，选择不同的外部迭代器|
 
-![iterator](http://f.hiphotos.baidu.com/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=105348f073f08202399f996d2a929088/2934349b033b5bb574f28c2d36d3d539b600bc38.jpg)
+![iterator](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060705.jpg)
 
 
 ###访问者模式
@@ -176,7 +176,7 @@ NSNumber numberWith*:
 
 访问者模式是扩展组合结构功能的一种强有力的方式。如果组合结构具有精心设计的基本操作，而且结构将来也不会变更，就可以使用访问者模式，用各种不同用途的访问者，以同样的方式访问这个组合结构。访问者模式用尽可能少的修改，可以把组合结构与其他访问者类中的相关算法分离。
 
-![visitor](http://h.hiphotos.baidu.com/baike/w%3D268/sign=754a7a88abd3fd1f3609a53c084f25ce/d31b0ef41bd5ad6e2a058d4c82cb39dbb7fd3c9c.jpg)
+![visitor](https://raw.github.com/Rannie/Rannie.github.io/master/images/2015060706.jpg)
 
 
 -- EOF --
