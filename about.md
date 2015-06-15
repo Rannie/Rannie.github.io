@@ -4,9 +4,9 @@ title: 关于
 permalink: /about/
 ---
 
-目前从事iOS开发工作。喜欢Objective-C以及Swift语言。熟悉C以及Java。偶尔写写博客，之前的博客在CSDN上[BLOG](http://blog.csdn.net/cocoarannie) 
+目前从事 iOS 开发工作。喜欢 Objective-C 以及 Swift 语言。熟悉 C 以及 Java。偶尔写写博客，之前的博客在 CSDN 上 [BLOG](http://blog.csdn.net/cocoarannie) 
 
-偶尔写一些小的项目放到GitHub上。目前打算争取利用更多的时间把代码进行重构，发布到个人仓库中。[GitHub地址](https://github.com/Rannie) 
+偶尔写一些小的项目放到 GitHub 上。目前打算争取利用更多的时间把代码进行重构，发布到个人仓库中。[GitHub地址](https://github.com/Rannie) 
 <br>
 
 ------
