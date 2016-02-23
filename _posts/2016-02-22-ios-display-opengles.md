@@ -43,5 +43,102 @@ GPU 需要知道内存中的那个位置来存储渲染出来的 2D 图像像素
 
 下图为整个 OpenGL ES 的绘制管道:
 
+![pipeline](https://raw.githubusercontent.com/Rannie/Rannie.github.io/master/images/2016-02/opengles_pipeline.png)
 
 
+### iOS 设备与 OpenGL ES
+
+每一个 iOS 原生用户界面对象都有对应的 Core Animation Layer, layer 会保存所有绘制操作的结果。苹果的 Core Animation 合成器使用 OpenGL ES 来尽可能高效地控制 GPU 、混合 layer 和切换帧缓冲区。图形程序员经常使用**混合 (composite)** 来描述混合图像来形成一个合成结果的过程。所有显示的图画都是通过 Core Animation 合成器来完成的，因此最终都涉及 OpenGL ES 。
+
+苹果官方文档描述了 iOS 设备图形显示的架构:
+
+![ios-structure](http://i.imgur.com/QcQlN7B.png)
+
+##### 渲染的各个阶段
+
+在应用内部有四个阶段:
+
+* 布局：在这个阶段，程序设置 View/Layer 的层级信息，设置 layer 的属性，如 frame，background color 等等。
+* 创建 backing image：在这个阶段程序会创建 layer 的 backing image，无论是通过 setContents 将一个 image 传給 layer，还是通过 drawRect：或 drawLayer:inContext：来画出来的。所以 drawRect：等函数是在这个阶段被调用的。
+* 准备：在这个阶段，Core Animation 框架准备要渲染的 layer 的各种属性数据，以及要做的动画的参数，准备传递給 render server。同时在这个阶段也会解压要渲染的 image。（除了用 imageNamed：方法从 bundle 加载的 image 会立刻解压之外，其他的比如直接从硬盘读入，或者从网络上下载的 image 不会立刻解压，只有在真正要渲染的时候才会解压）。
+* 提交：在这个阶段，Core Animation 打包 layer 的信息以及需要做的动画的参数，通过 IPC（inter-Process Communication）传递給 render server。
+
+在应用外部有两个阶段:
+
+当这些数据到达 render server 后，会被反序列化成 render tree。然后 render server 会做下面的两件事：
+
+* 根据 layer 的各种属性（如果是动画的，会计算动画 layer 的属性的中间值），用 OpenGL 准备渲染。
+* 渲染这些可视的 layer 到屏幕。
+
+如果做动画的话，最后的两个步骤会一直重复知道动画结束。
+
+我们都知道 iOS 设备的屏幕刷新频率是 60HZ。如果上面的这些步骤在一个刷新周期之内无法做完（1/60s），就会造成掉帧。
+
+##### 资源消耗的原因和解决方案
+
+相对于 CPU 来说，GPU 能干的事情比较单一：接收提交的纹理（Texture）和顶点描述（三角形），应用变换（transform）、混合并渲染，然后输出到屏幕上。通常你所能看到的内容，主要也就是纹理（图片）和形状（三角模拟的矢量图形）两类。
+
+**纹理的渲染**
+
+所有的 Bitmap，包括图片、文本、栅格化的内容，最终都要由内存提交到显存，绑定为 GPU Texture。不论是提交到显存的过程，还是 GPU 调整和渲染 Texture 的过程，都要消耗不少 GPU 资源。当在较短时间显示大量图片时（比如 TableView 存在非常多的图片并且快速滑动时），CPU 占用率很低，GPU 占用非常高，界面仍然会掉帧。避免这种情况的方法只能是尽量减少在短时间内大量图片的显示，尽可能将多张图片合成为一张进行显示。
+
+当图片过大，超过 GPU 的最大纹理尺寸时，图片需要先由 CPU 进行预处理，这对 CPU 和 GPU 都会带来额外的资源消耗。目前来说，iPhone 4S 以上机型，纹理尺寸上限都是 4096x4096，更详细的资料可以看这里：iosres.com。所以，尽量不要让图片和视图的大小超过这个值。
+
+**视图的混合 (Composing)**
+
+当多个视图（或者说 CALayer）重叠在一起显示时，GPU 会首先把他们混合到一起。如果视图结构过于复杂，混合的过程也会消耗很多 GPU 资源。为了减轻这种情况的 GPU 消耗，应用应当尽量减少视图数量和层次，并在不透明的视图里标明 opaque 属性以避免无用的 Alpha 通道合成。当然，这也可以用上面的方法，把多个视图预先渲染为一张图片来显示。
+
+**图形的生成。**
+
+CALayer 的 border、圆角、阴影、遮罩（mask），CASharpLayer 的矢量图形显示，通常会触发离屏渲染（offscreen rendering），而离屏渲染通常发生在 GPU 中。当一个列表视图中出现大量圆角的 CALayer，并且快速滑动时，可以观察到 GPU 资源已经占满，而 CPU 资源消耗很少。这时界面仍然能正常滑动，但平均帧数会降到很低。为了避免这种情况，可以尝试开启 CALayer.shouldRasterize 属性，但这会把原本离屏渲染的操作转嫁到 CPU 上去。对于只需要圆角的某些场合，也可以用一张已经绘制好的圆角图片覆盖到原本视图上面来模拟相同的视觉效果。最彻底的解决办法，就是把需要显示的图形在后台线程绘制为图片，避免使用圆角、阴影、遮罩等属性。
+
+##### 离屏渲染
+
+OpenGL 中，GPU 屏幕渲染有以下两种方式：
+
+* On-Screen Rendering
+意为当前屏幕渲染，指的是 GPU 的渲染操作是在当前用于显示的屏幕缓冲区中进行。
+
+* Off-Screen Rendering
+意为离屏渲染，指的是 GPU 在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。
+
+相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：
+
+* 创建新缓冲区
+要想进行离屏渲染，首先要创建一个新的缓冲区。
+
+* 上下文切换
+离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上有需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。
+
+所以在图形生成的步骤我们要尽可能的避免离屏渲染，或者开启 *shouldRasterize* 属性。
+
+### 渲染优化的注意点
+
+根据上面的描述，简单的汇总一些优化渲染的注意点：
+
+隐藏的绘制：catextlayer 和 uilabel 都是将 text 画入 backing image 的。如果改了一个包含 text 的 view 的 frame 的话，text 会被重新绘制。
+
+Rasterize：当使用 layer 的 shouldRasterize 的时候（记得设置适当的 layer 的 rasterizationScale），layer 会被强制绘制到一个 offscreen image 上，并且会被缓存起来。这种方法可以用来缓存绘制耗时（比如有比较绚的效果）但是不经常改的 layer，如果 layer 经常变，就不适合用。
+
+离屏绘制： 使用 Rounded corner， layer masks， drop shadows 的效果可以使用 stretchable images。比如实现 rounded corner，可以将一个圆形的图片赋值于 layer 的 content 的属性。并且设置好 contentsCenter 和 contentScale 属性。
+
+Blending and Overdraw ：如果一个 layer 被另一个 layer 完全遮盖，GPU 会做优化不渲染被遮盖的 layer，但是计算一个 layer 是否被另一个 layer 完全遮盖是很耗 cpu 的。将几个半透明的 layer 的 color 融合在一起也是很消耗的。
+
+我们要做的：
+
+设置 view 的 backgroundColor 为一个固定的，不透明的 color。
+如果一个 view 是不透明的，设置 opaque 属性为 YES。（直接告诉程序这个是不透明的，而不是让程序去计算）
+这样会减少 blending 和 overdraw。
+
+如果使用 image 的话，尽量避免设置 image 的 alpha 为透明的，如果一些效果需要几个图片融合而成，就让设计用一张图画好，不要让程序在运行的时候去动态的融合。
+
+这篇文章林林总总的描述了一些概念和注意点，在优化时可以结合 Instrument 中的 Core Animation 和 GPU Driver 来进行测试。对于局部需要特别要求性能的地方可以尝试 Facebook 开源的 [AsyncDisplayKit](https://github.com/facebook/AsyncDisplayKit) 或者国内大牛的 [YYKit](https://github.com/ibireme/YYKit) 。
+
+以上就是这篇文章的全部内容，上面大部分的内容总结以及参考自一些书籍和文章:
+
+* 《Learning OpenGL ES for iOS》 - Erik M. Buck
+* 《OpenGL ES 2.0 Programming Guide》 - Aaftab Munshi / Dan Ginsburg / Dave Shreiner 
+* 《iOS 视图、动画渲染机制探究》 - 腾讯 Bugly 
+* 《iOS 保持界面流畅的技巧》 - ibireme 
+
+欢迎提出建议,个人联系方式详见 [关于](http://rannie.github.io/about)。
