@@ -1,11 +1,37 @@
-# Site settings
-title: Rannie’s Page
-email: cocoarannie@163.com
-description: 关于iOS开发的Blog以及点点滴滴。
-logo: site_logo.png
-url: http://rannie.github.io
-weibo_username: cocoarannie
-github_username:  rannie
-
-# Build settings
+permalink: /blog/:year/:month/:title.html 
+include: ['.htaccess']
+exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md", "CNAME", "Gemfile", "Gemfile.lock"]
 markdown: kramdown
+highlights: pygments
+url: 
+cdn_url: 
+lsi: false
+safe: true
+timezone: Asia/Shanghai
+auto: false 
+
+paginate: 8
+paginate_path: "page:num"
+
+kramdown:
+  auto_ids: true,
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  use_coderay: false
+
+JB :
+  IMAGE_PATH : http://coolshell.info/images
+
+# presonal config
+domain: 
+title: Rannie's Page
+description:
+author: Hanran Liu
+email: cocoarannie@163.com
+github: rannie
+
+config:
+  js_dir:
+  img_dir:
+  css_dir:
