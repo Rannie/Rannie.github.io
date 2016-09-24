@@ -46,6 +46,7 @@ iOS 开发工程师，目前就职于搜狐视频。
 
 奢侈品电商优众的 iOS 端应用。
 
+<img src="https://github.com/Rannie/Rannie.github.io/blob/master/images/2016_09_about/uzhong_icon.png?raw=true" width="60">
 <a href="https://itunes.apple.com/cn/app/you-zhong/id506299184?mt=8" target="_blank">iTunes链接</a>
 <br>
 
@@ -53,6 +54,7 @@ iOS 开发工程师，目前就职于搜狐视频。
 
 56 网的照片类亲子社交应用。
 
+<img src="https://github.com/Rannie/Rannie.github.io/blob/master/images/2016_09_about/56baby_icon.png?raw=true" width="60">
 <a href="https://itunes.apple.com/cn/app/56bao-bao-bao-bao-zhuan-shu/id953929550?mt=8" target="_blank">iTunes链接</a>
 <br>
 
@@ -60,6 +62,7 @@ iOS 开发工程师，目前就职于搜狐视频。
 
 搜狐视频客户端。
 
+<img src="https://github.com/Rannie/Rannie.github.io/blob/master/images/2016_09_about/sohutv_icon.png?raw=true" width="60">
 <a href="https://itunes.apple.com/cn/app/sou-hu-shi-pin-hai-liang-you/id458587755?mt=8&v0=WWW-GCCN-ITSTOP100-FREEAPPS&l=&ign-mpt=uo%3D4" target="_blank">iTunes链接</a>
 <br>
 
