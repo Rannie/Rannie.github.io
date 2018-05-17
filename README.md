@@ -1,4 +1,6 @@
 Rannie.github.io
 ================
 
-User site
+User site new in [BITCRON](https://rannie.bitcron.com/)
+
+
